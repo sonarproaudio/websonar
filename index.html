@@ -482,7 +482,7 @@
 <!-- NAV -->
 <nav id="navbar">
   <a href="#hero" class="nav-logo">
-    <video src="video/logo.mp4" autoplay muted loop playsinline></video>
+    <video src="video/logo_animado.mp4" autoplay muted loop playsinline poster="img/logo.png"></video>
     <span class="nav-logo-text">SONAR <span>PRO</span></span>
   </a>
   <ul class="nav-links">
@@ -509,7 +509,7 @@
 <!-- ══ HERO ══ -->
 <section id="hero">
   <video id="hero-video" autoplay muted loop playsinline>
-    <source src="video/hero.mp4" type="video/mp4">
+    <source src="video/presentacion.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
   <div class="hero-content">
@@ -849,15 +849,22 @@ document.querySelectorAll('.reveal, .stat-item').forEach(el => revealObs.observe
 // ── GALLERY FROM FIREBASE ──
 const galleryGrid = document.getElementById('galleryGrid');
 
+// Fotos existentes en el repo (se muestran siempre)
+const STATIC_GALLERY = Array.from({length: 15}, (_, i) => ({
+  type: 'photo', url: `img/galeria${i + 1}.jpeg`, title: `Evento ${i + 1}`
+}));
+
 db.collection('media').orderBy('createdAt', 'desc').onSnapshot(snap => {
-  if (snap.empty) {
-    galleryGrid.innerHTML = '<div class="gallery-empty">La galería se está preparando. ¡Vuelve pronto!</div>';
-    return;
-  }
   galleryGrid.innerHTML = '';
+  // Primero las fotos nuevas de Firebase
   snap.forEach(doc => {
-    const item = doc.data();
-    const el   = makeGalleryItem(item);
+    const el = makeGalleryItem(doc.data());
+    galleryGrid.appendChild(el);
+    revealObs.observe(el);
+  });
+  // Luego las fotos estáticas del repo
+  STATIC_GALLERY.forEach(item => {
+    const el = makeGalleryItem(item);
     galleryGrid.appendChild(el);
     revealObs.observe(el);
   });
