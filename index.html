@@ -739,7 +739,9 @@ function buildVidCarousel() {
     } else {
       slide.innerHTML = `<video src="${item.url}" muted preload="none"></video><div class="carousel-overlay"></div><div class="carousel-play">▶</div>`;
     }
-    slide.addEventListener('click', () => openLbVid(i));
+    slide.addEventListener('click', () => {
+      if (item.type === 'fb-reel') { window.open(item.url, '_blank'); } else { openLbVid(i); }
+    });
     track.appendChild(slide);
     const dot = document.createElement('button');
     dot.className = 'carousel-dot' + (i===0?' active':'');
