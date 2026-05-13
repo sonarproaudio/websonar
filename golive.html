@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Sonar — Live Control</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --bg: #080808; --bg2: #111; --gold: #C9A84C; --gold2: #D4B85A;
+      --red: #e63946; --green: #2ecc71; --text: #F0F0F0; --text2: #888;
+    }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+    /* ── LOGIN ── */
+    #loginScreen {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 32px 24px;
+    }
+    .login-logo { font-size: 2rem; font-weight: 900; letter-spacing: 4px; margin-bottom: 6px; }
+    .login-logo span { color: var(--gold); }
+    .login-sub { color: var(--text2); font-size: .75rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 48px; }
+    .login-label { font-size: .7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); margin-bottom: 10px; display: block; }
+    .login-input {
+      width: 100%; max-width: 320px; background: var(--bg2); border: 1px solid rgba(201,168,76,.3);
+      border-radius: 12px; padding: 16px 20px; color: var(--text); font-size: 1rem;
+      outline: none; margin-bottom: 16px; transition: border-color .2s;
+    }
+    .login-input:focus { border-color: var(--gold); }
+    .btn-enter {
+      width: 100%; max-width: 320px; background: var(--gold); color: #000; border: none;
+      border-radius: 12px; padding: 18px; font-size: 1rem; font-weight: 800;
+      letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: background .2s;
+    }
+    .btn-enter:active { background: var(--gold2); }
+    .login-err { color: var(--red); font-size: .82rem; margin-top: 12px; display: none; }
+
+    /* ── MAIN CONTROL ── */
+    #mainScreen {
+      display: none; min-height: 100vh; flex-direction: column;
+      align-items: center; justify-content: center; padding: 32px 24px; gap: 28px;
+    }
+    .top-logo { font-size: 1.4rem; font-weight: 900; letter-spacing: 3px; }
+    .top-logo span { color: var(--gold); }
+
+    /* Status badge */
+    .status-badge {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 24px; border-radius: 100px; font-size: .85rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase; border: 1px solid;
+    }
+    .status-badge.offline { background: rgba(255,255,255,.05); color: var(--text2); border-color: rgba(255,255,255,.08); }
+    .status-badge.online  { background: rgba(230,57,70,.12); color: var(--red); border-color: rgba(230,57,70,.35); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
+    .status-badge.online .dot { animation: blink 1s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+    /* URL input */
+    #urlSection { width: 100%; max-width: 380px; display: none; flex-direction: column; gap: 10px; }
+    #urlSection label { font-size: .7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); }
+    #liveUrl {
+      width: 100%; background: var(--bg2); border: 1px solid rgba(201,168,76,.3);
+      border-radius: 12px; padding: 16px 18px; color: var(--text); font-size: .95rem;
+      outline: none; transition: border-color .2s;
+    }
+    #liveUrl:focus { border-color: var(--gold); }
+
+    /* Buttons */
+    .btn-go {
+      width: 100%; max-width: 380px; background: var(--red); color: #fff; border: none;
+      border-radius: 16px; padding: 22px; font-size: 1.2rem; font-weight: 900;
+      letter-spacing: 3px; text-transform: uppercase; cursor: pointer;
+      transition: opacity .2s; display: flex; align-items: center; justify-content: center; gap: 12px;
+    }
+    .btn-go:active { opacity: .8; }
+    .btn-stop {
+      width: 100%; max-width: 380px; background: var(--bg2); color: var(--text2);
+      border: 1px solid rgba(255,255,255,.12); border-radius: 16px; padding: 18px;
+      font-size: 1rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      cursor: pointer; transition: all .2s;
+    }
+    .btn-stop:active { background: rgba(230,57,70,.1); color: var(--red); border-color: rgba(230,57,70,.3); }
+
+    .msg { font-size: .82rem; color: var(--text2); text-align: center; }
+    .msg.ok  { color: var(--green); }
+    .msg.err { color: var(--red); }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-logo">$<span>ONAR</span></div>
+  <div class="login-sub">Live Control</div>
+  <label class="login-label">Contraseña</label>
+  <input class="login-input" type="password" id="passInput" placeholder="••••••••" autocomplete="current-password">
+  <button class="btn-enter" onclick="doLogin()">Entrar</button>
+  <div class="login-err" id="loginErr">Contraseña incorrecta</div>
+</div>
+
+<!-- MAIN -->
+<div id="mainScreen">
+  <div class="top-logo">$<span>ONAR</span></div>
+
+  <div class="status-badge offline" id="statusBadge">
+    <div class="dot"></div>
+    <span id="statusText">OFFLINE</span>
+  </div>
+
+  <div id="urlSection">
+    <label>Link del Live de Facebook</label>
+    <input type="url" id="liveUrl" placeholder="https://www.facebook.com/...">
+  </div>
+
+  <button class="btn-go" id="btnGo" onclick="goLive()">🔴 GO LIVE</button>
+  <button class="btn-stop" id="btnStop" onclick="stopLive()" style="display:none">⬛ DETENER LIVE</button>
+
+  <div class="msg" id="msg"></div>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:            "AIzaSyCVa5Qe2LBNr3jVjPTjbZJ9Ju5n9ZzsRUg",
+  authDomain:        "sonarproaudio.firebaseapp.com",
+  projectId:         "sonarproaudio",
+  storageBucket:     "sonarproaudio.firebasestorage.app",
+  messagingSenderId: "661813986043",
+  appId:             "1:661813986043:web:985235871795ac84d9665e"
+});
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+// Auto-login check (Firebase persists session)
+auth.onAuthStateChanged(user => {
+  if (user) showMain();
+});
+
+function doLogin() {
+  const pass = document.getElementById('passInput').value;
+  document.getElementById('loginErr').style.display = 'none';
+  auth.signInWithEmailAndPassword('sonarpro@sonarproaudio.com', pass)
+    .then(showMain)
+    .catch(() => { document.getElementById('loginErr').style.display = 'block'; });
+}
+document.getElementById('passInput').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function showMain() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('mainScreen').style.display  = 'flex';
+  loadStatus();
+}
+
+function loadStatus() {
+  db.collection('settings').doc('live').onSnapshot(doc => {
+    if (!doc.exists) return;
+    const d = doc.data();
+    setStatus(d.isLive && d.liveUrl);
+  });
+}
+
+function setStatus(isLive) {
+  const badge = document.getElementById('statusBadge');
+  const text  = document.getElementById('statusText');
+  const btnGo   = document.getElementById('btnGo');
+  const btnStop = document.getElementById('btnStop');
+  const urlSec  = document.getElementById('urlSection');
+  if (isLive) {
+    badge.className = 'status-badge online';
+    text.textContent = 'EN VIVO';
+    btnGo.style.display   = 'none';
+    btnStop.style.display = 'block';
+    urlSec.style.display  = 'none';
+  } else {
+    badge.className = 'status-badge offline';
+    text.textContent = 'OFFLINE';
+    btnGo.style.display   = 'flex';
+    btnStop.style.display = 'none';
+    urlSec.style.display  = 'flex';
+  }
+}
+
+function showMsg(txt, type) {
+  const el = document.getElementById('msg');
+  el.textContent = txt; el.className = 'msg ' + type;
+  setTimeout(() => { el.textContent = ''; el.className = 'msg'; }, 3000);
+}
+
+async function goLive() {
+  const url = document.getElementById('liveUrl').value.trim();
+  if (!url) { showMsg('Pega el link del live primero', 'err'); return; }
+  try {
+    await db.collection('settings').doc('live').set({
+      isLive: true, liveUrl: url,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    showMsg('🔴 Live activado', 'ok');
+  } catch(e) { showMsg('Error, intenta de nuevo', 'err'); }
+}
+
+async function stopLive() {
+  try {
+    await db.collection('settings').doc('live').set({
+      isLive: false, liveUrl: '',
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    showMsg('Live detenido', 'ok');
+  } catch(e) { showMsg('Error, intenta de nuevo', 'err'); }
+}
+</script>
+</body>
+</html>
