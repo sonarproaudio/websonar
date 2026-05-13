@@ -257,32 +257,64 @@
     .srv-desc { color: var(--text2); font-size: .88rem; line-height: 1.75; }
 
     /* ── GALLERY ── */
+    /* ── CAROUSEL ── */
     #galeria { background: var(--bg2); }
-    .gallery-grid {
-      columns: 3 260px; gap: 14px;
-      max-width: 1400px; margin: 0 auto 50px;
+    .carousel-wrap {
+      position: relative; max-width: 1100px; margin: 0 auto;
+      overflow: hidden; border-radius: 16px;
+      border: 1px solid var(--gold-b);
     }
-    .g-item {
-      break-inside: avoid; margin-bottom: 14px;
-      border-radius: 10px; overflow: hidden;
-      cursor: pointer; position: relative; display: block;
+    .carousel-track {
+      display: flex; transition: transform .5s cubic-bezier(.25,.46,.45,.94);
     }
-    .g-item img, .g-item video { width: 100%; display: block; transition: transform .5s ease; }
-    .g-item:hover img, .g-item:hover video { transform: scale(1.04); }
-    .g-overlay {
+    .carousel-slide {
+      min-width: 100%; position: relative; cursor: pointer;
+    }
+    .carousel-slide img,
+    .carousel-slide video {
+      width: 100%; height: 560px; object-fit: cover; display: block;
+    }
+    .carousel-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(8,8,8,.75) 0%, transparent 55%);
-      opacity: 0; transition: opacity var(--t);
+      background: linear-gradient(to top, rgba(8,8,8,.7) 0%, transparent 50%);
     }
-    .g-item:hover .g-overlay { opacity: 1; }
-    .g-play {
+    .carousel-play {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-      width: 58px; height: 58px; background: rgba(201,168,76,.9);
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem; color: #000; pointer-events: none;
+      width: 70px; height: 70px; background: rgba(201,168,76,.9); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; color: #000;
     }
-    .gallery-empty { text-align: center; padding: 80px 20px; color: var(--text3); }
-    .gallery-loading { text-align: center; padding: 60px; color: var(--text3); font-size: .9rem; letter-spacing: 2px; }
+    .carousel-caption {
+      position: absolute; bottom: 24px; left: 28px;
+      font-size: .78rem; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(255,255,255,.5);
+    }
+    .carousel-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 52px; height: 52px; background: rgba(8,8,8,.7);
+      border: 1px solid var(--gold-b); border-radius: 50%;
+      color: var(--gold); font-size: 1.6rem; line-height: 1;
+      cursor: pointer; z-index: 10; transition: all var(--t);
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(8px);
+    }
+    .carousel-btn:hover { background: var(--gold); color: #000; border-color: var(--gold); }
+    .carousel-prev { left: 16px; }
+    .carousel-next { right: 16px; }
+    .carousel-dots {
+      display: flex; justify-content: center; gap: 8px;
+      padding: 20px 0 4px;
+    }
+    .carousel-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--text3); border: none; cursor: pointer;
+      transition: all var(--t); padding: 0;
+    }
+    .carousel-dot.active { background: var(--gold); width: 22px; border-radius: 3px; }
+    .carousel-counter {
+      text-align: center; color: var(--text3);
+      font-size: .72rem; letter-spacing: 2px; margin-bottom: 12px;
+    }
 
     /* ── VIDEO / LIVE ── */
     #en-vivo { background: var(--bg); }
@@ -482,7 +514,7 @@
 <!-- NAV -->
 <nav id="navbar">
   <a href="#hero" class="nav-logo">
-    <video src="video/logo_animado.mp4" autoplay muted loop playsinline poster="img/logo.png"></video>
+    <img src="img/logo.png" alt="Sonar Pro Audio" style="height:48px;width:auto;object-fit:contain;">
   </a>
   <ul class="nav-links">
     <li><a href="#nosotros">Nosotros</a></li>
@@ -605,9 +637,13 @@
     <p class="s-desc">Momentos capturados de los eventos que hemos hecho posibles en California.</p>
     <div class="gold-line"></div>
   </div>
-  <div class="gallery-grid" id="galleryGrid">
-    <div class="gallery-loading">Cargando galería...</div>
+  <div class="carousel-counter" id="carouselCounter"></div>
+  <div class="carousel-wrap">
+    <div class="carousel-track" id="carouselTrack"></div>
+    <button class="carousel-btn carousel-prev" onclick="carouselMove(-1)" aria-label="Anterior">‹</button>
+    <button class="carousel-btn carousel-next" onclick="carouselMove(1)"  aria-label="Siguiente">›</button>
   </div>
+  <div class="carousel-dots" id="carouselDots"></div>
 </section>
 
 <!-- ══ EN VIVO / VIDEO ══ -->
@@ -729,7 +765,7 @@
 <footer>
   <div class="footer-grid">
     <div class="ft-brand">
-      <span style="font-size:1.25rem;font-weight:900;letter-spacing:2px;">SONAR <span style="color:var(--gold)">PRO</span></span>
+      <img src="img/logo.png" alt="Sonar Pro Audio" style="height:52px;width:auto;object-fit:contain;margin-bottom:14px;display:block;">
       <p>Los #1 en producción de sonido, video e iluminación en California. Más de 10 años haciendo eventos inolvidables.</p>
     </div>
     <div class="ft-col">
@@ -848,43 +884,89 @@ document.querySelectorAll('.reveal, .stat-item').forEach(el => revealObs.observe
 // ── GALLERY FROM FIREBASE ──
 const galleryGrid = document.getElementById('galleryGrid');
 
-// Fotos existentes en el repo (se muestran siempre)
+// ── CAROUSEL ──
 const STATIC_GALLERY = Array.from({length: 15}, (_, i) => ({
-  type: 'photo', url: `img/galeria${i + 1}.jpeg`, title: `Evento ${i + 1}`
+  type: 'photo', url: `img/galeria${i + 1}.jpeg`, title: `Foto ${i + 1}`
 }));
 
+let carouselItems = [];
+let carouselIndex = 0;
+let carouselTimer = null;
+
 db.collection('media').orderBy('createdAt', 'desc').onSnapshot(snap => {
-  galleryGrid.innerHTML = '';
-  // Primero las fotos nuevas de Firebase
-  snap.forEach(doc => {
-    const el = makeGalleryItem(doc.data());
-    galleryGrid.appendChild(el);
-    revealObs.observe(el);
-  });
-  // Luego las fotos estáticas del repo
-  STATIC_GALLERY.forEach(item => {
-    const el = makeGalleryItem(item);
-    galleryGrid.appendChild(el);
-    revealObs.observe(el);
-  });
+  const firebaseItems = snap.docs.map(d => d.data());
+  carouselItems = [...firebaseItems, ...STATIC_GALLERY];
+  buildCarousel();
 });
 
-function makeGalleryItem(item) {
-  const div = document.createElement('div');
-  div.className = 'g-item reveal';
-  if (item.type === 'video') {
-    div.innerHTML = `
-      <video src="${item.url}" muted preload="none" poster="${item.thumbnail||''}"></video>
-      <div class="g-overlay"></div>
-      <div class="g-play">▶</div>`;
-    div.addEventListener('click', () => openLbVideo(item.url));
-  } else {
-    div.innerHTML = `
-      <img src="${item.url}" alt="${item.title||''}" loading="lazy">
-      <div class="g-overlay"></div>`;
-    div.addEventListener('click', () => openLbImg(item.url));
-  }
-  return div;
+function buildCarousel() {
+  const track   = document.getElementById('carouselTrack');
+  const dots    = document.getElementById('carouselDots');
+  const counter = document.getElementById('carouselCounter');
+  if (!carouselItems.length) return;
+
+  track.innerHTML = '';
+  dots.innerHTML  = '';
+
+  carouselItems.forEach((item, i) => {
+    const slide = document.createElement('div');
+    slide.className = 'carousel-slide';
+    if (item.type === 'video') {
+      slide.innerHTML = `
+        <video src="${item.url}" muted preload="none" poster="${item.thumbnail||''}"></video>
+        <div class="carousel-overlay"></div>
+        <div class="carousel-play">▶</div>
+        <div class="carousel-caption">${item.title||''}</div>`;
+      slide.addEventListener('click', () => openLbVideo(item.url));
+    } else {
+      slide.innerHTML = `
+        <img src="${item.url}" alt="${item.title||''}" loading="${i < 3 ? 'eager' : 'lazy'}">
+        <div class="carousel-overlay"></div>
+        <div class="carousel-caption">${item.title||''}</div>`;
+      slide.addEventListener('click', () => openLbImg(item.url));
+    }
+    track.appendChild(slide);
+
+    const dot = document.createElement('button');
+    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Slide ${i + 1}`);
+    dot.addEventListener('click', () => goToSlide(i));
+    dots.appendChild(dot);
+  });
+
+  counter.textContent = `1 / ${carouselItems.length}`;
+  goToSlide(0);
+  startCarouselAuto();
+
+  // Touch/swipe
+  let startX = 0;
+  track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, {passive:true});
+  track.addEventListener('touchend',   e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) carouselMove(diff > 0 ? 1 : -1);
+  });
+}
+
+function goToSlide(n) {
+  carouselIndex = (n + carouselItems.length) % carouselItems.length;
+  document.getElementById('carouselTrack').style.transform = `translateX(-${carouselIndex * 100}%)`;
+  document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === carouselIndex));
+  const c = document.getElementById('carouselCounter');
+  if (c) c.textContent = `${carouselIndex + 1} / ${carouselItems.length}`;
+}
+
+function carouselMove(dir) {
+  goToSlide(carouselIndex + dir);
+  restartCarouselAuto();
+}
+
+function startCarouselAuto() {
+  clearInterval(carouselTimer);
+  carouselTimer = setInterval(() => goToSlide(carouselIndex + 1), 5000);
+}
+function restartCarouselAuto() {
+  clearInterval(carouselTimer);
+  carouselTimer = setInterval(() => goToSlide(carouselIndex + 1), 5000);
 }
 
 // ── LIGHTBOX ──
