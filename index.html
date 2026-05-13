@@ -155,6 +155,7 @@
 
     /* ── VIDEOS SECTION ── */
     #videos { background: var(--bg); }
+    #videos .carousel-slide video { object-fit: contain; background: #000; }
 
     /* ── LIVE SECTION ── */
     #en-vivo { background: var(--bg2); display: none; }
@@ -593,7 +594,7 @@
   <button class="lb-arrow" id="lb-prev" onclick="lbMove(-1)">‹</button>
   <button class="lb-arrow" id="lb-next" onclick="lbMove(1)">›</button>
   <img    id="lb-img"   src="" alt="">
-  <video  id="lb-video" controls></video>
+  <video  id="lb-video" controls muted></video>
   <div    id="lb-fb"></div>
   <div    id="lb-counter"></div>
 </div>
