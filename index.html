@@ -201,6 +201,8 @@
     .btn-wa:hover { background: #1ebe5a; transform: translateY(-2px); }
     .btn-sms { background: var(--gold); color: #000; border: none; border-radius: 8px; padding: 14px 10px; font-family: var(--font); font-size: .82rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all var(--t); display: flex; align-items: center; justify-content: center; gap: 8px; }
     .btn-sms:hover { background: var(--gold2); transform: translateY(-2px); }
+    .btn-email { background: var(--gold); color: #000; border: none; border-radius: 8px; padding: 16px; font-family: var(--font); font-size: .88rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: all var(--t); display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; }
+    .btn-email:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(201,168,76,.3); }
 
     /* ── FOOTER ── */
     footer { background: var(--bg2); border-top: 1px solid var(--gold-b); padding: 60px 5% 30px; }
@@ -217,9 +219,11 @@
     .social-links a { width: 38px; height: 38px; background: var(--bg3); border: 1px solid var(--gold-b); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text2); text-decoration: none; font-size: .85rem; font-weight: 700; transition: all var(--t); }
     .social-links a:hover { background: var(--gold-a); border-color: var(--gold); color: var(--gold); }
 
-    /* ── WHATSAPP FLOAT ── */
-    .wa-float { position: fixed; bottom: 30px; right: 30px; z-index: 900; width: 58px; height: 58px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.7rem; box-shadow: 0 4px 20px rgba(37,211,102,.4); animation: waPulse 2.5s ease infinite; transition: transform var(--t); }
-    .wa-float:hover { transform: scale(1.1); animation: none; }
+    /* ── FLOATING BUTTONS ── */
+    .wa-float  { position: fixed; bottom: 30px;  right: 30px; z-index: 900; width: 58px; height: 58px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.7rem; box-shadow: 0 4px 20px rgba(37,211,102,.4); animation: waPulse 2.5s ease infinite; transition: transform var(--t); }
+    .wa-float:hover  { transform: scale(1.1); animation: none; }
+    .sms-float { position: fixed; bottom: 100px; right: 30px; z-index: 900; width: 58px; height: 58px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.55rem; box-shadow: 0 4px 20px rgba(201,168,76,.35); transition: transform var(--t); }
+    .sms-float:hover { transform: scale(1.1); }
     @keyframes waPulse { 0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.35)} 50%{box-shadow:0 4px 30px rgba(37,211,102,.65)} }
 
     /* ── LIGHTBOX ── */
@@ -266,7 +270,8 @@
 <body>
 
 <div id="loader"><div class="loader-ring"></div></div>
-<a href="https://wa.me/12096031081" target="_blank" rel="noopener" class="wa-float" aria-label="WhatsApp">💬</a>
+<a href="https://wa.me/12096031081" target="_blank" rel="noopener" class="wa-float"  aria-label="WhatsApp">💬</a>
+<a href="sms:+12096031081"          class="sms-float" aria-label="SMS">📱</a>
 
 <!-- NAV -->
 <nav id="navbar">
@@ -531,10 +536,7 @@
         <label data-i18n="fLblMsg">Mensaje</label>
         <textarea id="fMsg" data-i18n-ph="fPhMsg" placeholder="Cuéntanos sobre tu evento: fecha, lugar, número de personas..."></textarea>
       </div>
-      <div class="form-btns">
-        <button class="btn-wa"  onclick="sendWA()">💬 <span data-i18n="fBtnWA">WhatsApp</span></button>
-        <button class="btn-sms" onclick="sendSMS()">📱 <span data-i18n="fBtnSMS">Mensaje de Texto</span></button>
-      </div>
+      <button class="btn-email" onclick="sendEmail()">✉️ <span data-i18n="fBtnEmail">Enviar Cotización</span></button>
     </div>
   </div>
 </section>
@@ -657,12 +659,15 @@ document.querySelectorAll('.reveal, .stat-item').forEach(el => revealObs.observe
 //  IMAGE CAROUSEL
 // ══════════════════════════════════
 const STATIC_PHOTOS = Array.from({length:15}, (_,i) => ({ type:'photo', url:`img/galeria${i+1}.jpeg`, title:'' }));
-let imgItems = [], imgIndex = 0, imgTimer = null;
+let imgItems = [...STATIC_PHOTOS], imgIndex = 0, imgTimer = null;
+buildImgCarousel(); // carga inmediata con fotos estáticas
 
 db.collection('media').where('type','==','photo').orderBy('createdAt','desc').onSnapshot(snap => {
-  imgItems = [...snap.docs.map(d => d.data()), ...STATIC_PHOTOS];
-  buildImgCarousel();
-});
+  if (!snap.empty) {
+    imgItems = [...snap.docs.map(d => d.data()), ...STATIC_PHOTOS];
+    buildImgCarousel();
+  }
+}, () => {});
 
 function buildImgCarousel() {
   const track = document.getElementById('imgTrack');
@@ -699,13 +704,14 @@ function imgMove(dir) { imgGo(imgIndex+dir); clearInterval(imgTimer); imgTimer=s
 // ══════════════════════════════════
 const REEL_URL   = 'https://www.facebook.com/reel/4126339414283341';
 const REEL_EMBED = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(REEL_URL)}&show_text=false&width=734`;
-let vidItems = [], vidIndex = 0, vidTimer = null;
+const REEL_ITEM  = { type:'fb-reel', url:REEL_URL, embed:REEL_EMBED, title:'Video de Presentación' };
+let vidItems = [REEL_ITEM], vidIndex = 0, vidTimer = null;
+buildVidCarousel(); // carga inmediata con el reel
 
 db.collection('media').where('type','==','video').orderBy('createdAt','desc').onSnapshot(snap => {
-  const fbVids = snap.docs.map(d => d.data());
-  vidItems = [{ type:'fb-reel', url:REEL_URL, embed:REEL_EMBED, title:'Video de Presentación' }, ...fbVids];
+  vidItems = [REEL_ITEM, ...snap.docs.map(d => d.data())];
   buildVidCarousel();
-});
+}, () => {});
 
 function buildVidCarousel() {
   const track = document.getElementById('vidTrack');
@@ -817,17 +823,21 @@ document.addEventListener('keydown', e => {
 // ══════════════════════════════════
 //  CONTACTO
 // ══════════════════════════════════
-const WA_NUM = '12096031081';
-function getMsgText() {
+function sendEmail() {
   const name  = document.getElementById('fName').value.trim();
   const phone = document.getElementById('fPhone').value.trim();
   const event = document.getElementById('fEvent').value;
   const msg   = document.getElementById('fMsg').value.trim();
-  if (!name || !event) { alert(currentLang==='es'?'Por favor ingresa tu nombre y tipo de evento.':'Please enter your name and event type.'); return null; }
-  return `Hola! 👋\n\n*Nombre:* ${name}\n*Teléfono:* ${phone}\n*Evento:* ${event}\n*Mensaje:* ${msg}`;
+  if (!name || !event) {
+    alert(currentLang==='es'?'Por favor ingresa tu nombre y tipo de evento.':'Please enter your name and event type.');
+    return;
+  }
+  const subject = encodeURIComponent(`Cotización de Evento — ${event}`);
+  const body = encodeURIComponent(
+    `Nombre: ${name}\nTeléfono: ${phone}\nTipo de Evento: ${event}\n\nMensaje:\n${msg}`
+  );
+  window.location.href = `mailto:sonarpro@sonarproaudio.com?subject=${subject}&body=${body}`;
 }
-function sendWA()  { const t=getMsgText(); if(t) window.open(`https://wa.me/${WA_NUM}?text=${encodeURIComponent(t)}`,'_blank'); }
-function sendSMS() { const t=getMsgText(); if(t) window.open(`sms:+${WA_NUM}?body=${encodeURIComponent(t)}`,'_blank'); }
 
 // ══════════════════════════════════
 //  TEMA OSCURO / CLARO
@@ -885,7 +895,7 @@ const T = {
     fPhMsg:'Cuéntanos sobre tu evento: fecha, lugar, número de personas...',
     fOpt0:'Seleccionar...', fOpt1:'Concierto / Festival', fOpt2:'Quinceañera',
     fOpt3:'Boda', fOpt4:'Evento Corporativo', fOpt5:'Fiesta Privada', fOpt6:'Otro',
-    fBtnWA:'WhatsApp', fBtnSMS:'Mensaje de Texto',
+    fBtnEmail:'Enviar Cotización',
     ftBrand:'Los #1 en producción de sonido, video e iluminación en California. Más de 10 años haciendo eventos inolvidables.',
     ftSrvTitle:'Servicios', ftCtTitle:'Contacto',
     ftCopy:'© 2025 · California · Todos los derechos reservados',
@@ -923,7 +933,7 @@ const T = {
     fPhMsg:'Tell us about your event: date, venue, number of guests...',
     fOpt0:'Select...', fOpt1:'Concert / Festival', fOpt2:'Quinceañera',
     fOpt3:'Wedding', fOpt4:'Corporate Event', fOpt5:'Private Party', fOpt6:'Other',
-    fBtnWA:'WhatsApp', fBtnSMS:'Text Message',
+    fBtnEmail:'Send Quote',
     ftBrand:'#1 in sound, video & lighting production in California. Over 10 years making unforgettable events.',
     ftSrvTitle:'Services', ftCtTitle:'Contact',
     ftCopy:'© 2025 · California · All rights reserved',
