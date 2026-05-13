@@ -260,15 +260,17 @@
     /* ── CAROUSEL ── */
     #galeria { background: var(--bg2); }
     .carousel-wrap {
-      position: relative; max-width: 1100px; margin: 0 auto;
+      position: relative; width: 100%; max-width: 1100px; margin: 0 auto;
       overflow: hidden; border-radius: 16px;
       border: 1px solid var(--gold-b);
     }
     .carousel-track {
-      display: flex; transition: transform .5s cubic-bezier(.25,.46,.45,.94);
+      display: flex; flex-wrap: nowrap;
+      transition: transform .5s cubic-bezier(.25,.46,.45,.94);
+      will-change: transform;
     }
     .carousel-slide {
-      min-width: 100%; position: relative; cursor: pointer;
+      min-width: 100%; flex-shrink: 0; position: relative; cursor: pointer;
     }
     .carousel-slide img,
     .carousel-slide video {
@@ -765,7 +767,6 @@
 <footer>
   <div class="footer-grid">
     <div class="ft-brand">
-      <img src="img/logo.png" alt="Sonar Pro Audio" style="height:52px;width:auto;object-fit:contain;margin-bottom:14px;display:block;">
       <p>Los #1 en producción de sonido, video e iluminación en California. Más de 10 años haciendo eventos inolvidables.</p>
     </div>
     <div class="ft-col">
@@ -789,7 +790,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2025 Sonar Pro Audio · California · Todos los derechos reservados</p>
+    <p>© 2025 · California · Todos los derechos reservados</p>
     <div class="social-links">
       <a href="https://facebook.com/nazario.rojas.9" target="_blank" rel="noopener" aria-label="Facebook">fb</a>
       <a href="https://instagram.com/sonarproaudio" target="_blank" rel="noopener" aria-label="Instagram">ig</a>
