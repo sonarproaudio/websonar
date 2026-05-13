@@ -715,8 +715,11 @@ function imgMove(dir) { imgGo(imgIndex+dir); clearInterval(imgTimer); imgTimer=s
 // ══════════════════════════════════
 //  VIDEO CAROUSEL
 // ══════════════════════════════════
-const REEL_ITEM  = { type:'video', url:'video/presentacion.mp4', title:'Video de Presentación' };
-let vidItems = [REEL_ITEM], vidIndex = 0, vidTimer = null;
+const VID_ITEMS = [
+  { type:'video', url:'video/presentacion.mp4',    title:'Video de Presentación' },
+  { type:'video', url:'video/stockton_deorro.mp4', title:'Sonar Stockton — Deorro' }
+];
+let vidItems = [...VID_ITEMS], vidIndex = 0, vidTimer = null;
 buildVidCarousel();
 
 function buildVidCarousel() {
