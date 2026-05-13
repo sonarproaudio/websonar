@@ -716,7 +716,6 @@ function imgMove(dir) { imgGo(imgIndex+dir); clearInterval(imgTimer); imgTimer=s
 //  VIDEO CAROUSEL
 // ══════════════════════════════════
 const VID_ITEMS = [
-  { type:'video', url:'video/presentacion.mp4',    title:'Video de Presentación' },
   { type:'video', url:'video/stockton_deorro.mp4', title:'Sonar Stockton — Deorro' }
 ];
 let vidItems = [...VID_ITEMS], vidIndex = 0, vidTimer = null;
@@ -738,7 +737,7 @@ function buildVidCarousel() {
         </div>
         <div class="carousel-overlay"></div>`;
     } else {
-      slide.innerHTML = `<video src="${item.url}" muted preload="none"></video><div class="carousel-overlay"></div><div class="carousel-play">▶</div>`;
+      slide.innerHTML = `<video src="${item.url}" muted preload="metadata"></video><div class="carousel-overlay"></div><div class="carousel-play">▶</div>`;
     }
     slide.addEventListener('click', () => {
       if (item.type === 'fb-reel') { window.open(item.url, '_blank'); } else { openLbVid(i); }
