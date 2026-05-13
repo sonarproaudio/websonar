@@ -356,6 +356,9 @@
       <button class="sb-link" onclick="showTab('tabLibrary', this)">
         <span class="icon">🗂️</span> Biblioteca
       </button>
+      <button class="sb-link" onclick="showTab('tabConfig', this)">
+        <span class="icon">⚙️</span> Config
+      </button>
     </div>
     <div class="sb-bottom">
       <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
@@ -450,6 +453,19 @@
       </div>
       <div class="lib-grid" id="libGrid">
         <div class="lib-loading">Cargando...</div>
+      </div>
+    </div>
+
+    <!-- ─── TAB: CONFIG ─── -->
+    <div id="tabConfig" class="tab-panel">
+      <div class="main-top"><div><h1>Configuración</h1><p>Token de GitHub para subir archivos</p></div></div>
+      <div class="upload-card" style="max-width:500px">
+        <h3>GitHub Token</h3>
+        <div class="uf" style="margin-top:20px">
+          <label>Personal Access Token</label>
+          <input type="password" id="ghTokenInput" placeholder="ghp_...">
+        </div>
+        <button class="btn-upload" onclick="saveToken()">Guardar Token</button>
       </div>
     </div>
 
@@ -685,38 +701,50 @@ async function uploadAll() {
   btn.disabled = false; btn.textContent = '⬆ Subir a la Galería';
 }
 
-function uploadSingle(file, idx, title) {
-  return new Promise((resolve, reject) => {
-    const isVideo = file.type.startsWith('video/');
-    const ext   = file.name.split('.').pop();
-    const fname = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-    const path  = `media/${isVideo ? 'videos' : 'photos'}/${fname}`;
-    const ref   = storage.ref(path);
-    const task  = ref.put(file);
+const GH_REPO = 'sonarproaudio/websonar';
+function getGHToken() { return localStorage.getItem('gh_token') || ''; }
 
-    task.on('state_changed',
-      snap => {
-        const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
-        const bar = document.getElementById(`fqbar-${idx}`);
-        const st  = document.getElementById(`fqstatus-${idx}`);
-        if (bar) bar.style.width = pct + '%';
-        if (st)  st.textContent  = `Subiendo... ${pct}%`;
-      },
-      err => reject(err),
-      async () => {
-        const url = await task.snapshot.ref.getDownloadURL();
-        await db.collection('media').add({
-          type:      isVideo ? 'video' : 'photo',
-          url,
-          title:     title || file.name.replace(/\.[^.]+$/, ''),
-          thumbnail: '',
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        const st = document.getElementById(`fqstatus-${idx}`);
-        if (st) st.textContent = '✓ Subido';
-        resolve();
-      }
-    );
+async function uploadSingle(file, idx) {
+  if (!getGHToken()) { showToast('Falta el token de GitHub en Configuración', 'red'); throw new Error('no token'); }
+  const isVideo = file.type.startsWith('video/');
+  const ext     = file.name.split('.').pop().toLowerCase();
+  const fname   = `${Date.now()}.${ext}`;
+  const folder  = isVideo ? 'video' : 'img';
+  const path    = `${folder}/${fname}`;
+
+  const bar = document.getElementById(`fqbar-${idx}`);
+  const st  = document.getElementById(`fqstatus-${idx}`);
+  if (st) st.textContent = 'Leyendo archivo...';
+
+  const b64 = await fileToBase64(file);
+  if (bar) bar.style.width = '40%';
+  if (st) st.textContent = 'Subiendo a GitHub...';
+
+  const res = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${getGHToken()}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: `Upload ${fname}`, content: b64 })
+  });
+
+  if (!res.ok) throw new Error('GitHub upload failed');
+  if (bar) bar.style.width = '100%';
+  if (st) st.textContent = '✓ Subido';
+}
+
+function saveToken() {
+  const t = document.getElementById('ghTokenInput').value.trim();
+  if (!t) { showToast('Pega el token primero', 'red'); return; }
+  localStorage.setItem('gh_token', t);
+  document.getElementById('ghTokenInput').value = '';
+  showToast('Token guardado ✓', 'green');
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
   });
 }
 
