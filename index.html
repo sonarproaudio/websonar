@@ -471,11 +471,33 @@
       background: rgba(0,0,0,.96); align-items: center; justify-content: center; padding: 20px;
     }
     #lightbox.open { display: flex; }
-    #lb-img { max-width: 90vw; max-height: 86vh; border-radius: var(--radius); object-fit: contain; }
-    #lb-video { max-width: 90vw; max-height: 86vh; border-radius: var(--radius); display: none; }
+    #lb-img { max-width: 88vw; max-height: 84vh; border-radius: var(--radius); object-fit: contain; }
+    #lb-video { max-width: 88vw; max-height: 84vh; border-radius: var(--radius); display: none; }
     #lb-close {
       position: fixed; top: 18px; right: 22px;
-      background: none; border: none; color: var(--text); cursor: pointer; font-size: 2.2rem; line-height: 1;
+      background: rgba(0,0,0,.5); border: 1px solid rgba(255,255,255,.15);
+      border-radius: 50%; width: 42px; height: 42px;
+      color: var(--text); cursor: pointer; font-size: 1.5rem; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--t);
+    }
+    #lb-close:hover { background: rgba(255,255,255,.15); }
+    .lb-arrow {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      width: 52px; height: 52px; background: rgba(0,0,0,.6);
+      border: 1px solid var(--gold-b); border-radius: 50%;
+      color: var(--gold); font-size: 1.8rem; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all var(--t); z-index: 2001;
+      backdrop-filter: blur(8px);
+    }
+    .lb-arrow:hover { background: var(--gold); color: #000; border-color: var(--gold); }
+    #lb-prev { left: 16px; }
+    #lb-next { right: 16px; }
+    #lb-counter {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      color: rgba(255,255,255,.4); font-size: .75rem; letter-spacing: 2px;
+      font-family: var(--font);
     }
 
     /* ── REVEAL ── */
@@ -802,8 +824,11 @@
 <!-- LIGHTBOX -->
 <div id="lightbox">
   <button id="lb-close" onclick="closeLb()">×</button>
+  <button class="lb-arrow" id="lb-prev" onclick="lbMove(-1)">‹</button>
+  <button class="lb-arrow" id="lb-next" onclick="lbMove(1)">›</button>
   <img  id="lb-img"   src="" alt="">
   <video id="lb-video" controls></video>
+  <div id="lb-counter"></div>
 </div>
 
 <!-- Firebase -->
@@ -971,24 +996,38 @@ function restartCarouselAuto() {
 }
 
 // ── LIGHTBOX ──
+let lbIndex = 0;
+
 function openLbImg(url) {
-  const lb  = document.getElementById('lightbox');
-  const img = document.getElementById('lb-img');
-  const vid = document.getElementById('lb-video');
-  img.src = url; img.style.display = 'block';
-  vid.style.display = 'none'; vid.pause();
-  lb.classList.add('open');
+  lbIndex = carouselItems.findIndex(i => i.url === url);
+  showLbItem(lbIndex);
+  document.getElementById('lightbox').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 function openLbVideo(url) {
-  const lb  = document.getElementById('lightbox');
-  const img = document.getElementById('lb-img');
-  const vid = document.getElementById('lb-video');
-  vid.src = url; vid.style.display = 'block'; img.style.display = 'none';
-  lb.classList.add('open');
+  lbIndex = carouselItems.findIndex(i => i.url === url);
+  showLbItem(lbIndex);
+  document.getElementById('lightbox').classList.add('open');
   document.body.style.overflow = 'hidden';
-  vid.play();
 }
+
+function showLbItem(idx) {
+  lbIndex = (idx + carouselItems.length) % carouselItems.length;
+  const item = carouselItems[lbIndex];
+  const img  = document.getElementById('lb-img');
+  const vid  = document.getElementById('lb-video');
+  const ctr  = document.getElementById('lb-counter');
+  vid.pause();
+  if (item.type === 'video') {
+    vid.src = item.url; vid.style.display = 'block'; img.style.display = 'none'; vid.play();
+  } else {
+    img.src = item.url; img.style.display = 'block'; vid.style.display = 'none';
+  }
+  if (ctr) ctr.textContent = `${lbIndex + 1} / ${carouselItems.length}`;
+}
+
+function lbMove(dir) { showLbItem(lbIndex + dir); }
+
 function closeLb() {
   document.getElementById('lightbox').classList.remove('open');
   document.getElementById('lb-video').pause();
@@ -997,7 +1036,12 @@ function closeLb() {
 document.getElementById('lightbox').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeLb();
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape')      closeLb();
+  if (e.key === 'ArrowLeft')   lbMove(-1);
+  if (e.key === 'ArrowRight')  lbMove(1);
+});
 
 // ── FACEBOOK LIVE — escucha Firestore en tiempo real ──
 const REEL_URL = 'https://www.facebook.com/reel/4126339414283341';
