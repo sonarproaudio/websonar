@@ -669,14 +669,18 @@ document.querySelectorAll('.reveal, .stat-item').forEach(el => revealObs.observe
 // ══════════════════════════════════
 const STATIC_PHOTOS = Array.from({length:15}, (_,i) => ({ type:'photo', url:`img/galeria${i+1}.jpeg`, title:'' }));
 let imgItems = [...STATIC_PHOTOS], imgIndex = 0, imgTimer = null;
-buildImgCarousel(); // carga inmediata con fotos estáticas
+buildImgCarousel();
 
-db.collection('media').where('type','==','photo').orderBy('createdAt','desc').onSnapshot(snap => {
-  if (!snap.empty) {
-    imgItems = [...snap.docs.map(d => d.data()), ...STATIC_PHOTOS];
-    buildImgCarousel();
-  }
-}, () => {});
+fetch('https://api.github.com/repos/sonarproaudio/websonar/contents/img')
+  .then(r => r.json())
+  .then(files => {
+    if (!Array.isArray(files)) return;
+    const photos = files
+      .filter(f => /\.(jpe?g|png|webp)$/i.test(f.name) && !/^logo/i.test(f.name))
+      .map(f => ({ type:'photo', url:`img/${f.name}`, title:'' }));
+    if (photos.length) { imgItems = photos; buildImgCarousel(); }
+  })
+  .catch(() => {});
 
 function buildImgCarousel() {
   const track = document.getElementById('imgTrack');
@@ -715,12 +719,7 @@ const REEL_URL   = 'https://www.facebook.com/reel/4126339414283341';
 const REEL_EMBED = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(REEL_URL)}&show_text=false&width=734`;
 const REEL_ITEM  = { type:'fb-reel', url:REEL_URL, embed:REEL_EMBED, title:'Video de Presentación' };
 let vidItems = [REEL_ITEM], vidIndex = 0, vidTimer = null;
-buildVidCarousel(); // carga inmediata con el reel
-
-db.collection('media').where('type','==','video').orderBy('createdAt','desc').onSnapshot(snap => {
-  vidItems = [REEL_ITEM, ...snap.docs.map(d => d.data())];
-  buildVidCarousel();
-}, () => {});
+buildVidCarousel();
 
 function buildVidCarousel() {
   const track = document.getElementById('vidTrack');
