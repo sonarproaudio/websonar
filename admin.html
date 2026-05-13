@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — Sonar Pro Audio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg:    #080808; --bg2: #0f0f0f; --bg3: #141414; --bg4: #1c1c1c;
+      --gold:  #C9A84C; --gold2: #D4B85A;
+      --gold-a: rgba(201,168,76,.12); --gold-b: rgba(201,168,76,.22);
+      --text: #F0F0F0; --text2: #A0A0A0; --text3: #555;
+      --red: #e63946; --green: #2ecc71;
+      --radius: 10px; --font: 'Montserrat', sans-serif; --t: .25s ease;
+    }
+    html, body { height: 100%; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+    /* ══ LOGIN ══ */
+    #loginScreen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(ellipse at center, #111 0%, var(--bg) 70%);
+    }
+    .login-box {
+      background: var(--bg3); border: 1px solid var(--gold-b);
+      border-radius: 16px; padding: 52px 44px; width: 100%; max-width: 400px;
+      text-align: center;
+    }
+    .login-logo {
+      font-size: 1.4rem; font-weight: 900; letter-spacing: 3px;
+      margin-bottom: 8px;
+    }
+    .login-logo span { color: var(--gold); }
+    .login-sub { color: var(--text3); font-size: .78rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 36px; }
+    .login-box h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 28px; }
+    .lf { margin-bottom: 16px; text-align: left; }
+    .lf label { display: block; font-size: .7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text2); margin-bottom: 8px; }
+    .lf input {
+      width: 100%; background: var(--bg); border: 1px solid var(--gold-b);
+      border-radius: 8px; padding: 13px 16px; color: var(--text);
+      font-family: var(--font); font-size: .9rem; outline: none;
+      transition: border-color var(--t);
+    }
+    .lf input:focus { border-color: var(--gold); }
+    .btn-login {
+      width: 100%; background: var(--gold); color: #000; border: none;
+      border-radius: 8px; padding: 15px; margin-top: 8px;
+      font-family: var(--font); font-size: .88rem; font-weight: 800;
+      letter-spacing: 2px; text-transform: uppercase;
+      cursor: pointer; transition: all var(--t);
+    }
+    .btn-login:hover { background: var(--gold2); }
+    .btn-login:disabled { opacity: .5; cursor: not-allowed; }
+    #loginError {
+      color: var(--red); font-size: .82rem; margin-top: 14px;
+      display: none; padding: 10px; background: rgba(230,57,70,.1);
+      border-radius: 6px; border: 1px solid rgba(230,57,70,.25);
+    }
+
+    /* ══ DASHBOARD ══ */
+    #dashboard { display: none; min-height: 100vh; }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0; width: 240px;
+      background: var(--bg2); border-right: 1px solid var(--gold-b);
+      display: flex; flex-direction: column; z-index: 100;
+    }
+    .sb-brand {
+      padding: 28px 24px 24px;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .sb-brand-name { font-size: 1rem; font-weight: 900; letter-spacing: 2px; }
+    .sb-brand-name span { color: var(--gold); }
+    .sb-brand-sub { font-size: .68rem; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+    .sb-nav { flex: 1; padding: 20px 12px; }
+    .sb-link {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 8px; cursor: pointer;
+      color: var(--text2); font-size: .85rem; font-weight: 600;
+      transition: all var(--t); margin-bottom: 4px;
+      border: none; background: none; width: 100%; text-align: left;
+    }
+    .sb-link:hover, .sb-link.active {
+      background: var(--gold-a); color: var(--gold);
+    }
+    .sb-link .icon { font-size: 1.1rem; width: 20px; text-align: center; }
+    .sb-bottom { padding: 20px 12px; border-top: 1px solid rgba(255,255,255,.05); }
+    .btn-logout {
+      width: 100%; padding: 11px 14px; background: none;
+      border: 1px solid rgba(230,57,70,.3); border-radius: 8px;
+      color: var(--red); font-family: var(--font); font-size: .82rem;
+      font-weight: 600; cursor: pointer; transition: all var(--t);
+    }
+    .btn-logout:hover { background: rgba(230,57,70,.1); }
+
+    /* Main content */
+    .main {
+      margin-left: 240px; padding: 40px;
+      min-height: 100vh;
+    }
+    .main-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 36px;
+    }
+    .main-top h1 { font-size: 1.6rem; font-weight: 800; }
+    .main-top p  { color: var(--text2); font-size: .85rem; margin-top: 4px; }
+
+    /* Tab panels */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ══ PANEL: LIVE ══ */
+    .live-card {
+      background: var(--bg3); border: 1px solid var(--gold-b);
+      border-radius: var(--radius); padding: 36px; max-width: 600px;
+    }
+    .live-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+    .live-card p  { color: var(--text2); font-size: .88rem; margin-bottom: 28px; line-height: 1.7; }
+
+    .live-toggle-row {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 28px;
+    }
+    .toggle-switch {
+      position: relative; width: 56px; height: 28px; flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0; background: var(--bg4);
+      border-radius: 28px; cursor: pointer; transition: .3s;
+      border: 1px solid var(--gold-b);
+    }
+    .toggle-slider::before {
+      content: ''; position: absolute; left: 3px; top: 3px;
+      width: 20px; height: 20px; background: var(--text2);
+      border-radius: 50%; transition: .3s;
+    }
+    input:checked + .toggle-slider { background: rgba(230,57,70,.2); border-color: var(--red); }
+    input:checked + .toggle-slider::before { transform: translateX(28px); background: var(--red); }
+    .toggle-label { font-size: .9rem; font-weight: 600; }
+
+    .live-url-group { margin-bottom: 20px; }
+    .live-url-group label { display: block; font-size: .7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text2); margin-bottom: 9px; }
+    .live-url-group input {
+      width: 100%; background: var(--bg); border: 1px solid var(--gold-b);
+      border-radius: 8px; padding: 13px 16px; color: var(--text);
+      font-family: var(--font); font-size: .88rem; outline: none;
+      transition: border-color var(--t);
+    }
+    .live-url-group input:focus { border-color: var(--gold); }
+    .live-url-group .hint { color: var(--text3); font-size: .75rem; margin-top: 6px; line-height: 1.5; }
+
+    .live-status {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-radius: 100px; font-size: .78rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px;
+    }
+    .live-status.off { background: var(--bg4); color: var(--text3); border: 1px solid var(--bg4); }
+    .live-status.on  { background: rgba(230,57,70,.1); color: var(--red); border: 1px solid rgba(230,57,70,.3); }
+    .live-status .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    .live-status.on .dot { animation: blink 1.2s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .btn-save {
+      background: var(--gold); color: #000; border: none; border-radius: 8px;
+      padding: 13px 32px; font-family: var(--font); font-size: .85rem; font-weight: 800;
+      letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
+      transition: all var(--t);
+    }
+    .btn-save:hover { background: var(--gold2); }
+    .btn-save:disabled { opacity: .5; cursor: not-allowed; }
+    #liveMsg { margin-top: 14px; font-size: .82rem; display: none; padding: 10px 14px; border-radius: 6px; }
+    #liveMsg.ok  { background: rgba(46,204,113,.1); color: var(--green); border: 1px solid rgba(46,204,113,.3); display: block; }
+    #liveMsg.err { background: rgba(230,57,70,.1);  color: var(--red);   border: 1px solid rgba(230,57,70,.3);  display: block; }
+
+    /* ══ PANEL: UPLOAD ══ */
+    .upload-card {
+      background: var(--bg3); border: 1px solid var(--gold-b);
+      border-radius: var(--radius); padding: 36px; max-width: 700px; margin-bottom: 32px;
+    }
+    .upload-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; }
+
+    .drop-zone {
+      border: 2px dashed var(--gold-b); border-radius: var(--radius);
+      padding: 52px 20px; text-align: center; cursor: pointer;
+      transition: all var(--t); margin-bottom: 20px;
+    }
+    .drop-zone:hover, .drop-zone.over { border-color: var(--gold); background: var(--gold-a); }
+    .drop-icon { font-size: 2.8rem; margin-bottom: 14px; }
+    .drop-text { color: var(--text2); font-size: .9rem; line-height: 1.7; }
+    .drop-text strong { color: var(--gold); cursor: pointer; }
+    .drop-formats { font-size: .75rem; color: var(--text3); margin-top: 8px; }
+    #fileInput { display: none; }
+
+    .upload-fields { margin-bottom: 20px; }
+    .uf { margin-bottom: 14px; }
+    .uf label { display: block; font-size: .7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text2); margin-bottom: 8px; }
+    .uf input, .uf select {
+      width: 100%; background: var(--bg); border: 1px solid var(--gold-b);
+      border-radius: 8px; padding: 12px 16px; color: var(--text);
+      font-family: var(--font); font-size: .88rem; outline: none;
+      transition: border-color var(--t);
+    }
+    .uf input:focus, .uf select:focus { border-color: var(--gold); }
+    .uf select option { background: var(--bg); }
+
+    /* File preview queue */
+    #fileQueue { margin-bottom: 20px; }
+    .fq-item {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--bg4); border-radius: 8px; padding: 12px 16px;
+      margin-bottom: 8px;
+    }
+    .fq-thumb {
+      width: 48px; height: 48px; border-radius: 6px; object-fit: cover;
+      background: var(--bg3); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+    }
+    .fq-thumb img, .fq-thumb video { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+    .fq-info { flex: 1; }
+    .fq-name { font-size: .85rem; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px; }
+    .fq-size { font-size: .72rem; color: var(--text3); }
+    .fq-progress { height: 4px; background: var(--bg3); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+    .fq-bar { height: 100%; background: var(--gold); width: 0%; transition: width .3s; border-radius: 2px; }
+    .fq-status { font-size: .75rem; color: var(--text2); margin-top: 4px; }
+    .fq-remove { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 1.1rem; padding: 4px; transition: color var(--t); }
+    .fq-remove:hover { color: var(--red); }
+
+    .btn-upload {
+      background: var(--gold); color: #000; border: none; border-radius: 8px;
+      padding: 14px 36px; font-family: var(--font); font-size: .88rem; font-weight: 800;
+      letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
+      transition: all var(--t);
+    }
+    .btn-upload:hover { background: var(--gold2); }
+    .btn-upload:disabled { opacity: .5; cursor: not-allowed; }
+
+    /* ══ PANEL: MEDIA LIBRARY ══ */
+    .lib-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; flex-wrap: wrap; gap: 14px;
+    }
+    .lib-toolbar h3 { font-size: 1.1rem; font-weight: 700; }
+    .lib-filter { display: flex; gap: 8px; }
+    .lib-filter button {
+      padding: 7px 18px; border-radius: 6px; border: 1px solid var(--gold-b);
+      background: none; color: var(--text2); font-family: var(--font);
+      font-size: .78rem; font-weight: 600; cursor: pointer; transition: all var(--t);
+    }
+    .lib-filter button.active, .lib-filter button:hover {
+      background: var(--gold-a); color: var(--gold); border-color: var(--gold);
+    }
+    .lib-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .lib-item {
+      background: var(--bg3); border: 1px solid var(--gold-b);
+      border-radius: var(--radius); overflow: hidden; position: relative;
+      transition: border-color var(--t);
+    }
+    .lib-item:hover { border-color: rgba(201,168,76,.5); }
+    .lib-thumb {
+      width: 100%; height: 140px; object-fit: cover; display: block;
+      background: var(--bg4);
+    }
+    .lib-thumb.video-icon {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; color: var(--gold);
+    }
+    .lib-meta { padding: 12px; }
+    .lib-name { font-size: .8rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+    .lib-type { font-size: .68rem; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; }
+    .lib-actions { display: flex; gap: 8px; padding: 0 12px 12px; }
+    .lib-btn-del {
+      flex: 1; background: none; border: 1px solid rgba(230,57,70,.25);
+      border-radius: 6px; padding: 7px; color: var(--red);
+      font-family: var(--font); font-size: .72rem; font-weight: 700;
+      cursor: pointer; transition: all var(--t); letter-spacing: 1px;
+    }
+    .lib-btn-del:hover { background: rgba(230,57,70,.12); }
+    .lib-badge {
+      position: absolute; top: 8px; left: 8px;
+      background: rgba(8,8,8,.8); color: var(--gold); font-size: .65rem;
+      font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      padding: 4px 8px; border-radius: 4px;
+    }
+    .lib-empty { text-align: center; padding: 60px 20px; color: var(--text3); grid-column: 1/-1; }
+    .lib-loading { text-align: center; padding: 60px 20px; color: var(--text3); font-size: .88rem; letter-spacing: 2px; grid-column: 1/-1; }
+
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--bg3); border: 1px solid var(--gold-b); border-radius: 10px;
+      padding: 14px 28px; font-size: .85rem; font-weight: 600;
+      opacity: 0; transition: all .35s ease; z-index: 9999;
+      pointer-events: none; white-space: nowrap;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.green { border-color: rgba(46,204,113,.4); color: var(--green); }
+    #toast.red   { border-color: rgba(230,57,70,.4);  color: var(--red); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: 60px; flex-direction: row; bottom: auto; padding: 0; border-right: none; border-bottom: 1px solid var(--gold-b); }
+      .sb-brand { display: none; }
+      .sb-nav { display: flex; flex-direction: row; padding: 0 12px; overflow-x: auto; }
+      .sb-bottom { padding: 0 12px; display: flex; align-items: center; }
+      .sb-link { padding: 8px 12px; white-space: nowrap; }
+      .main { margin-left: 0; margin-top: 60px; padding: 24px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ LOGIN SCREEN ══ -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">SONAR <span>PRO</span></div>
+    <div class="login-sub">Panel de Administración</div>
+    <h2>Iniciar Sesión</h2>
+    <div class="lf">
+      <label>Usuario</label>
+      <input type="text" id="loginUser" placeholder="usuario" autocomplete="username">
+    </div>
+    <div class="lf">
+      <label>Contraseña</label>
+      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn-login" id="btnLogin" onclick="doLogin()">Entrar</button>
+    <div id="loginError"></div>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div id="dashboard">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-brand-name">SONAR <span>PRO</span></div>
+      <div class="sb-brand-sub">Admin Panel</div>
+    </div>
+    <div class="sb-nav">
+      <button class="sb-link active" onclick="showTab('tabLive', this)">
+        <span class="icon">🔴</span> Live
+      </button>
+      <button class="sb-link" onclick="showTab('tabUpload', this)">
+        <span class="icon">⬆️</span> Subir
+      </button>
+      <button class="sb-link" onclick="showTab('tabLibrary', this)">
+        <span class="icon">🗂️</span> Biblioteca
+      </button>
+    </div>
+    <div class="sb-bottom">
+      <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- ─── TAB: LIVE ─── -->
+    <div id="tabLive" class="tab-panel active">
+      <div class="main-top">
+        <div>
+          <h1>Transmisión en Vivo</h1>
+          <p>Activa el live para que se vea en el sitio web automáticamente</p>
+        </div>
+      </div>
+      <div class="live-card">
+        <h3>Estado actual</h3>
+        <p>Cuando actives el live y pegues la URL de tu Facebook, el sitio lo mostrará en tiempo real. Al apagarlo, vuelve al video de presentación automáticamente.</p>
+
+        <div id="liveStatus" class="live-status off">
+          <div class="dot"></div>
+          <span id="liveStatusText">Offline — mostrando video de presentación</span>
+        </div>
+
+        <div class="live-toggle-row">
+          <label class="toggle-switch">
+            <input type="checkbox" id="liveToggle" onchange="toggleLiveField()">
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label" id="toggleLabel">Live apagado</span>
+        </div>
+
+        <div class="live-url-group" id="liveUrlGroup" style="display:none">
+          <label>URL de tu Facebook Live</label>
+          <input type="url" id="liveUrl" placeholder="https://www.facebook.com/nazario.rojas.9/videos/...">
+          <div class="hint">
+            Pasos: Ve a Facebook → Inicia tu Live en vivo → Copia la URL de la transmisión → Pégala aquí → Guarda.
+          </div>
+        </div>
+
+        <button class="btn-save" id="btnSaveLive" onclick="saveLiveSettings()">Guardar cambios</button>
+        <div id="liveMsg"></div>
+      </div>
+    </div>
+
+    <!-- ─── TAB: UPLOAD ─── -->
+    <div id="tabUpload" class="tab-panel">
+      <div class="main-top">
+        <div>
+          <h1>Subir Contenido</h1>
+          <p>Sube fotos y videos para la galería del sitio</p>
+        </div>
+      </div>
+      <div class="upload-card">
+        <h3>Seleccionar archivos</h3>
+
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+          <div class="drop-icon">📁</div>
+          <div class="drop-text">
+            Arrastra tus fotos o videos aquí<br>o <strong>haz clic para seleccionar</strong>
+          </div>
+          <div class="drop-formats">JPG · PNG · WEBP · MP4 · MOV — Máx. 200MB por archivo</div>
+        </div>
+        <input type="file" id="fileInput" accept="image/*,video/*" multiple onchange="handleFiles(this.files)">
+
+        <div id="fileQueue"></div>
+
+        <div class="upload-fields" id="uploadFields" style="display:none">
+          <div class="uf">
+            <label>Título (opcional)</label>
+            <input type="text" id="uTitle" placeholder="Ej: Concierto en Stockton — Marzo 2025">
+          </div>
+        </div>
+
+        <button class="btn-upload" id="btnUpload" onclick="uploadAll()" style="display:none">
+          ⬆ Subir a la Galería
+        </button>
+      </div>
+    </div>
+
+    <!-- ─── TAB: LIBRARY ─── -->
+    <div id="tabLibrary" class="tab-panel">
+      <div class="lib-toolbar">
+        <h3>Biblioteca de Medios</h3>
+        <div class="lib-filter">
+          <button class="active" onclick="filterLib('all', this)">Todos</button>
+          <button onclick="filterLib('photo', this)">Fotos</button>
+          <button onclick="filterLib('video', this)">Videos</button>
+        </div>
+      </div>
+      <div class="lib-grid" id="libGrid">
+        <div class="lib-loading">Cargando...</div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /dashboard -->
+
+<div id="toast"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage-compat.js"></script>
+
+<script>
+// ══════════════════════════════════════════════
+//  FIREBASE CONFIG — reemplaza con tus datos
+// ══════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey:            "AIzaSyCVa5Qe2LBNr3jVjPTjbZJ9Ju5n9ZzsRUg",
+  authDomain:        "sonarproaudio.firebaseapp.com",
+  projectId:         "sonarproaudio",
+  storageBucket:     "sonarproaudio.firebasestorage.app",
+  messagingSenderId: "661813986043",
+  appId:             "1:661813986043:web:985235871795ac84d9665e"
+};
+firebase.initializeApp(firebaseConfig);
+const auth    = firebase.auth();
+const db      = firebase.firestore();
+const storage = firebase.storage();
+
+// ── AUTH STATE ──
+auth.onAuthStateChanged(user => {
+  if (user) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboard').style.display   = 'block';
+    initDashboard();
+  } else {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('dashboard').style.display   = 'none';
+  }
+});
+
+// ── LOGIN ──
+document.getElementById('loginPass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+document.getElementById('loginUser').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('loginPass').focus();
+});
+
+// El usuario "sonarpro" se mapea internamente al email de Firebase
+const USER_MAP = { sonarpro: 'sonarpro@sonarproaudio.com' };
+
+async function doLogin() {
+  const user = document.getElementById('loginUser').value.trim().toLowerCase();
+  const pass = document.getElementById('loginPass').value;
+  const btn  = document.getElementById('btnLogin');
+  if (!user || !pass) { showLoginErr('Ingresa usuario y contraseña.'); return; }
+  const email = USER_MAP[user];
+  if (!email) { showLoginErr('Usuario o contraseña incorrectos.'); return; }
+  btn.disabled = true; btn.textContent = 'Entrando...';
+  document.getElementById('loginError').style.display = 'none';
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch (e) {
+    btn.disabled = false; btn.textContent = 'Entrar';
+    showLoginErr('Usuario o contraseña incorrectos.');
+  }
+}
+function showLoginErr(msg) {
+  const el = document.getElementById('loginError');
+  el.textContent = msg; el.style.display = 'block';
+}
+function doLogout() {
+  auth.signOut();
+}
+
+// ── TABS ──
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-link').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'tabLibrary') loadLibrary();
+}
+
+// ── INIT ──
+function initDashboard() {
+  loadLiveStatus();
+  loadLibrary();
+}
+
+// ══════════════════════════════════
+//  LIVE
+// ══════════════════════════════════
+async function loadLiveStatus() {
+  const doc = await db.collection('settings').doc('live').get();
+  if (doc.exists) {
+    const d = doc.data();
+    const isLive = d.isLive && d.liveUrl;
+    document.getElementById('liveToggle').checked = isLive;
+    document.getElementById('liveUrl').value = d.liveUrl || '';
+    updateLiveUI(isLive);
+  }
+}
+
+function toggleLiveField() {
+  const on = document.getElementById('liveToggle').checked;
+  document.getElementById('liveUrlGroup').style.display = on ? 'block' : 'none';
+  updateLiveUI(on);
+}
+
+function updateLiveUI(on) {
+  const status = document.getElementById('liveStatus');
+  const label  = document.getElementById('toggleLabel');
+  const text   = document.getElementById('liveStatusText');
+  if (on) {
+    status.className = 'live-status on';
+    text.textContent = 'LIVE activo — el sitio muestra tu transmisión';
+    label.textContent = 'Live encendido';
+    document.getElementById('liveUrlGroup').style.display = 'block';
+  } else {
+    status.className = 'live-status off';
+    text.textContent = 'Offline — mostrando video de presentación';
+    label.textContent = 'Live apagado';
+  }
+}
+
+async function saveLiveSettings() {
+  const btn   = document.getElementById('btnSaveLive');
+  const msg   = document.getElementById('liveMsg');
+  const isOn  = document.getElementById('liveToggle').checked;
+  const url   = document.getElementById('liveUrl').value.trim();
+  msg.className = ''; msg.style.display = 'none';
+
+  if (isOn && !url) { showLiveMsg('Pega la URL de tu Facebook Live.', false); return; }
+  btn.disabled = true; btn.textContent = 'Guardando...';
+  try {
+    await db.collection('settings').doc('live').set({
+      isLive:    isOn,
+      liveUrl:   url,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    showLiveMsg(isOn ? '🔴 Live activado — ya se ve en el sitio.' : '✓ Live apagado. El sitio muestra el reel.', true);
+  } catch(e) {
+    showLiveMsg('Error al guardar. Intenta de nuevo.', false);
+  }
+  btn.disabled = false; btn.textContent = 'Guardar cambios';
+}
+
+function showLiveMsg(text, ok) {
+  const el = document.getElementById('liveMsg');
+  el.textContent = text;
+  el.className = ok ? 'ok' : 'err';
+}
+
+// ══════════════════════════════════
+//  UPLOAD
+// ══════════════════════════════════
+let filesToUpload = [];
+
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('over');
+  handleFiles(e.dataTransfer.files);
+});
+
+function handleFiles(fileList) {
+  const files = Array.from(fileList);
+  filesToUpload = [...filesToUpload, ...files];
+  renderQueue();
+}
+
+function renderQueue() {
+  const queue   = document.getElementById('fileQueue');
+  const fields  = document.getElementById('uploadFields');
+  const btn     = document.getElementById('btnUpload');
+  queue.innerHTML = '';
+  if (filesToUpload.length === 0) { fields.style.display = 'none'; btn.style.display = 'none'; return; }
+  fields.style.display = 'block'; btn.style.display = 'block';
+  filesToUpload.forEach((file, i) => {
+    const isVideo = file.type.startsWith('video/');
+    const div = document.createElement('div');
+    div.className = 'fq-item'; div.id = `fq-${i}`;
+    div.innerHTML = `
+      <div class="fq-thumb" id="fqthumb-${i}">
+        ${isVideo ? '🎬' : ''}
+      </div>
+      <div class="fq-info">
+        <div class="fq-name">${file.name}</div>
+        <div class="fq-size">${(file.size / 1024 / 1024).toFixed(1)} MB · ${isVideo ? 'Video' : 'Foto'}</div>
+        <div class="fq-progress"><div class="fq-bar" id="fqbar-${i}"></div></div>
+        <div class="fq-status" id="fqstatus-${i}">Listo para subir</div>
+      </div>
+      <button class="fq-remove" onclick="removeFile(${i})">✕</button>`;
+    queue.appendChild(div);
+    if (!isVideo) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const th = document.getElementById(`fqthumb-${i}`);
+        if (th) th.innerHTML = `<img src="${e.target.result}" alt="">`;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+}
+
+function removeFile(i) {
+  filesToUpload.splice(i, 1);
+  renderQueue();
+}
+
+async function uploadAll() {
+  const btn   = document.getElementById('btnUpload');
+  const title = document.getElementById('uTitle').value.trim();
+  btn.disabled = true; btn.textContent = 'Subiendo...';
+  let ok = 0;
+  for (let i = 0; i < filesToUpload.length; i++) {
+    const file = filesToUpload[i];
+    try {
+      await uploadSingle(file, i, title);
+      ok++;
+    } catch(e) {
+      document.getElementById(`fqstatus-${i}`).textContent = 'Error al subir';
+    }
+  }
+  showToast(`${ok} archivo${ok !== 1 ? 's' : ''} subido${ok !== 1 ? 's' : ''} correctamente`, 'green');
+  filesToUpload = []; renderQueue();
+  document.getElementById('uTitle').value = '';
+  btn.disabled = false; btn.textContent = '⬆ Subir a la Galería';
+}
+
+function uploadSingle(file, idx, title) {
+  return new Promise((resolve, reject) => {
+    const isVideo = file.type.startsWith('video/');
+    const ext   = file.name.split('.').pop();
+    const fname = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+    const path  = `media/${isVideo ? 'videos' : 'photos'}/${fname}`;
+    const ref   = storage.ref(path);
+    const task  = ref.put(file);
+
+    task.on('state_changed',
+      snap => {
+        const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
+        const bar = document.getElementById(`fqbar-${idx}`);
+        const st  = document.getElementById(`fqstatus-${idx}`);
+        if (bar) bar.style.width = pct + '%';
+        if (st)  st.textContent  = `Subiendo... ${pct}%`;
+      },
+      err => reject(err),
+      async () => {
+        const url = await task.snapshot.ref.getDownloadURL();
+        await db.collection('media').add({
+          type:      isVideo ? 'video' : 'photo',
+          url,
+          title:     title || file.name.replace(/\.[^.]+$/, ''),
+          thumbnail: '',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        const st = document.getElementById(`fqstatus-${idx}`);
+        if (st) st.textContent = '✓ Subido';
+        resolve();
+      }
+    );
+  });
+}
+
+// ══════════════════════════════════
+//  LIBRARY
+// ══════════════════════════════════
+let libFilter = 'all';
+let allMedia  = [];
+
+db.collection('media').orderBy('createdAt', 'desc').onSnapshot(snap => {
+  allMedia = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderLibrary();
+});
+
+function loadLibrary() { renderLibrary(); }
+
+function filterLib(type, btn) {
+  libFilter = type;
+  document.querySelectorAll('.lib-filter button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLibrary();
+}
+
+function renderLibrary() {
+  const grid = document.getElementById('libGrid');
+  const items = libFilter === 'all' ? allMedia : allMedia.filter(m => m.type === libFilter);
+  if (items.length === 0) {
+    grid.innerHTML = `<div class="lib-empty">No hay ${libFilter === 'all' ? 'contenido' : libFilter === 'photo' ? 'fotos' : 'videos'} aún.</div>`;
+    return;
+  }
+  grid.innerHTML = '';
+  items.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'lib-item';
+    const isVideo = item.type === 'video';
+    div.innerHTML = `
+      <div class="lib-badge">${isVideo ? '▶ VIDEO' : '📷 FOTO'}</div>
+      ${isVideo
+        ? `<div class="lib-thumb video-icon">🎬</div>`
+        : `<img class="lib-thumb" src="${item.url}" alt="${item.title||''}" loading="lazy">`}
+      <div class="lib-meta">
+        <div class="lib-name">${item.title || 'Sin título'}</div>
+        <div class="lib-type">${isVideo ? 'Video' : 'Foto'}</div>
+      </div>
+      <div class="lib-actions">
+        <button class="lib-btn-del" onclick="deleteItem('${item.id}', '${item.url}')">Eliminar</button>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+async function deleteItem(id, url) {
+  if (!confirm('¿Eliminar este archivo de la galería?')) return;
+  try {
+    await db.collection('media').doc(id).delete();
+    try {
+      await storage.refFromURL(url).delete();
+    } catch(e) { /* si falla storage, el doc ya fue eliminado */ }
+    showToast('Archivo eliminado', 'green');
+  } catch(e) {
+    showToast('Error al eliminar', 'red');
+  }
+}
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg, type = 'green') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `show ${type}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.className = ''; }, 3500);
+}
+</script>
+</body>
+</html>
