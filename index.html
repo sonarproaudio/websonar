@@ -715,9 +715,7 @@ function imgMove(dir) { imgGo(imgIndex+dir); clearInterval(imgTimer); imgTimer=s
 // ══════════════════════════════════
 //  VIDEO CAROUSEL
 // ══════════════════════════════════
-const REEL_URL   = 'https://www.facebook.com/reel/4126339414283341';
-const REEL_EMBED = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(REEL_URL)}&show_text=false&width=734`;
-const REEL_ITEM  = { type:'fb-reel', url:REEL_URL, embed:REEL_EMBED, title:'Video de Presentación' };
+const REEL_ITEM  = { type:'video', url:'video/presentacion.mp4', title:'Video de Presentación' };
 let vidItems = [REEL_ITEM], vidIndex = 0, vidTimer = null;
 buildVidCarousel();
 
