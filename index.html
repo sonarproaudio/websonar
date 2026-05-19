@@ -4,284 +4,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sonar Pro Audio | Sound · Video · Lighting | California</title>
-  <meta name="description" content="Los #1 en producción de sonido, video y luces en California. Más de 10 años de experiencia.">
-  <meta property="og:title" content="#1 en California — Sound · Video · Lighting">
-  <meta property="og:type" content="website">
+  <meta name="description" content="Los #1 en producción de sonido, video y luces en California. Más de 10 años de experiencia en conciertos, quinceañeras, bodas y eventos corporativos.">
 
-  <link rel="icon" href="img/Logo.PNG" type="image/png">
+  <!-- Open Graph -->
+  <meta property="og:title"            content="Sonar Pro Audio | #1 en California — Sound · Video · Lighting">
+  <meta property="og:description"      content="Los #1 en producción de sonido, video y luces en California. Más de 10 años de experiencia.">
+  <meta property="og:image"            content="https://www.sonarproaudio.com/img/Logo.PNG">
+  <meta property="og:url"              content="https://www.sonarproaudio.com">
+  <meta property="og:type"             content="website">
+  <meta property="og:locale"           content="es_US">
+  <meta property="og:locale:alternate" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Sonar Pro Audio | #1 en California">
+  <meta name="twitter:description" content="Producción profesional de sonido, video e iluminación en California.">
+  <meta name="twitter:image"       content="https://www.sonarproaudio.com/img/Logo.PNG">
+
+  <link rel="icon"       href="img/Logo.PNG" type="image/png">
+  <link rel="canonical"  href="https://www.sonarproaudio.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
 
-  <div id="fb-root"></div>
-  <script async defer crossorigin="anonymous"
-    src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v18.0"></script>
+  <!-- Prevent flash of wrong theme before CSS loads -->
+  <script>if (localStorage.getItem('theme') === 'light') document.documentElement.classList.add('light-init');</script>
+  <style>.light-init body { background: #ffffff; }</style>
 
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --bg:    #080808; --bg2: #0f0f0f; --bg3: #141414; --bg4: #1c1c1c;
-      --gold:  #C9A84C; --gold2: #D4B85A;
-      --gold-a: rgba(201,168,76,.12); --gold-b: rgba(201,168,76,.22);
-      --text: #F0F0F0; --text2: #A0A0A0; --text3: #555;
-      --red: #e63946; --green: #2ecc71;
-      --radius: 12px; --t: .3s ease; --font: 'Montserrat', sans-serif;
-    }
-    html { scroll-behavior: smooth; }
-    body { font-family: var(--font); background: var(--bg); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; transition: background .4s, color .4s; }
-
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
-
-    /* ── LIGHT MODE ── */
-    body.light {
-      --bg: #ffffff; --bg2: #f4f4f4; --bg3: #ececec; --bg4: #e2e2e2;
-      --text: #0a0a0a; --text2: #444; --text3: #999;
-      --gold-a: rgba(201,168,76,.1); --gold-b: rgba(201,168,76,.3);
-    }
-    body.light nav.scrolled { background: rgba(255,255,255,.97) !important; }
-    body.light .mobile-menu { background: rgba(255,255,255,.98); }
-    body.light .mobile-menu a { color: #0a0a0a; }
-    body.light .hero-overlay { background: linear-gradient(135deg,rgba(255,255,255,.82) 0%,rgba(255,255,255,.35) 50%,rgba(255,255,255,.75) 100%); }
-    body.light .hero-title { color: #0a0a0a; }
-    body.light .hero-desc { color: #333; }
-    body.light .btn-outline { border-color: rgba(0,0,0,.2); color: #0a0a0a; }
-    body.light .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
-
-    body.light ::-webkit-scrollbar-track { background: #f4f4f4; }
-
-    /* ── LOADER ── */
-    #loader { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9999; transition: opacity .5s, visibility .5s; }
-    #loader.hidden { opacity: 0; visibility: hidden; }
-    .loader-ring { width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--bg3); border-top-color: var(--gold); animation: spin .8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── NAV ── */
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 20px 5%; display: flex; align-items: center; justify-content: space-between; transition: all .4s ease; }
-    nav.scrolled { background: rgba(8,8,8,.96); backdrop-filter: blur(20px); padding: 13px 5%; border-bottom: 1px solid var(--gold-b); }
-    .nav-logo { display: flex; align-items: center; text-decoration: none; }
-    .nav-logo img { height: 96px; width: auto; object-fit: contain; transition: height .3s ease; mix-blend-mode: screen; }
-    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
-    .nav-links a { color: var(--text2); text-decoration: none; font-size: .82rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; transition: color var(--t); position: relative; }
-    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 1px; background: var(--gold); transform: scaleX(0); transition: transform var(--t); }
-    .nav-links a:hover { color: var(--gold); }
-    .nav-links a:hover::after { transform: scaleX(1); }
-    .nav-cta { background: var(--gold) !important; color: #000 !important; padding: 9px 22px; border-radius: 6px; font-weight: 800 !important; }
-    .nav-cta::after { display: none !important; }
-    .nav-cta:hover { background: var(--gold2) !important; }
-    .nav-controls { display: flex; align-items: center; gap: 8px; }
-    .nav-ctrl-btn { background: var(--gold-a); border: 1px solid var(--gold-b); border-radius: 7px; padding: 7px 13px; color: var(--text2); font-family: var(--font); font-size: .74rem; font-weight: 700; letter-spacing: 1px; cursor: pointer; transition: all var(--t); white-space: nowrap; }
-    .nav-ctrl-btn:hover { color: var(--gold); border-color: var(--gold); }
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
-    .hamburger span { display: block; width: 26px; height: 2px; background: var(--text); transition: all .3s; border-radius: 2px; }
-    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-    .mobile-menu { display: none; position: fixed; inset: 0; background: rgba(8,8,8,.98); backdrop-filter: blur(20px); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu a { color: var(--text); text-decoration: none; font-size: 1.4rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; transition: color var(--t); }
-    .mobile-menu a:hover { color: var(--gold); }
-    .mob-controls { display: flex; gap: 12px; margin-top: 16px; }
-
-    /* ── HERO ── */
-    #hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    #hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: .45; }
-    .hero-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(135deg,rgba(8,8,8,.9) 0%,rgba(8,8,8,.45) 50%,rgba(8,8,8,.85) 100%); }
-    .hero-content { position: relative; z-index: 2; text-align: center; padding: 0 20px; max-width: 920px; }
-    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--gold-a); border: 1px solid var(--gold-b); color: var(--gold); font-size: .72rem; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; padding: 8px 22px; border-radius: 100px; margin-bottom: 30px; }
-    .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; }
-    .hero-title { font-size: clamp(2.8rem, 8vw, 6.2rem); font-weight: 900; line-height: 1.05; letter-spacing: -1px; margin-bottom: 14px; }
-    .hero-title .gold { color: var(--gold); }
-    .hero-sub { font-size: clamp(.9rem, 2.5vw, 1.1rem); color: var(--text2); font-weight: 300; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 18px; }
-    .hero-desc { font-size: clamp(.88rem, 1.8vw, 1.05rem); color: var(--text2); line-height: 1.9; margin-bottom: 50px; max-width: 580px; margin-left: auto; margin-right: auto; }
-    .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-    .btn-gold { background: var(--gold); color: #000; padding: 15px 38px; border-radius: 8px; border: none; font-family: var(--font); font-size: .88rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: all var(--t); display: inline-flex; align-items: center; gap: 10px; }
-    .btn-gold:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(201,168,76,.3); }
-    .btn-outline { background: transparent; color: var(--text); padding: 15px 38px; border-radius: 8px; border: 1px solid rgba(240,240,240,.2); font-family: var(--font); font-size: .88rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: all var(--t); }
-    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
-    .hero-scroll { position: absolute; bottom: 38px; left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-    .hero-scroll span { font-size: .68rem; letter-spacing: 3px; color: var(--text3); text-transform: uppercase; }
-    .scroll-line { width: 1px; height: 48px; background: linear-gradient(to bottom, var(--gold), transparent); animation: scrollAnim 2s ease infinite; }
-    @keyframes scrollAnim { 0%{transform:scaleY(0);transform-origin:top} 49%{transform:scaleY(1);transform-origin:top} 50%{transform:scaleY(1);transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
-
-    /* ── SECTION BASE ── */
-    section { padding: 100px 5%; }
-    .section-hd { text-align: center; margin-bottom: 70px; }
-    .s-tag { display: inline-block; color: var(--gold); font-size: .7rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; }
-    .s-title { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; line-height: 1.1; margin-bottom: 18px; }
-    .s-desc { color: var(--text2); font-size: .95rem; line-height: 1.85; max-width: 580px; margin: 0 auto; }
-    .gold-line { width: 56px; height: 2px; background: var(--gold); margin: 22px auto 0; }
-
-    /* ── STATS ── */
-    #stats { padding: 60px 5%; background: var(--bg2); border-top: 1px solid var(--gold-b); border-bottom: 1px solid var(--gold-b); }
-    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 40px; max-width: 1000px; margin: 0 auto; }
-    .stat-item { text-align: center; }
-    .stat-num { font-size: clamp(2.2rem,5vw,3.6rem); font-weight: 900; color: var(--gold); line-height: 1; margin-bottom: 8px; }
-    .stat-label { font-size: .75rem; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
-
-    /* ── SERVICES ── */
-    #servicios { background: var(--bg); }
-    .srv-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 22px; max-width: 1200px; margin: 0 auto; }
-    .srv-card { background: var(--bg3); border: 1px solid var(--gold-b); border-radius: var(--radius); padding: 38px 30px; transition: all .4s ease; position: relative; overflow: hidden; }
-    .srv-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform .4s ease; }
-    .srv-card:hover { transform: translateY(-6px); background: var(--bg4); border-color: rgba(201,168,76,.5); }
-    .srv-card:hover::before { transform: scaleX(1); }
-    .srv-icon { font-size: 2.4rem; margin-bottom: 18px; display: block; }
-    .srv-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
-    .srv-desc { color: var(--text2); font-size: .88rem; line-height: 1.75; }
-
-    /* ── CAROUSEL (images & videos shared) ── */
-    .carousel-wrap { position: relative; width: 100%; max-width: 1100px; margin: 0 auto; overflow: hidden; border-radius: 16px; border: 1px solid var(--gold-b); }
-    .carousel-track { display: flex; flex-wrap: nowrap; transition: transform .5s cubic-bezier(.25,.46,.45,.94); will-change: transform; }
-    .carousel-slide { min-width: 100%; flex-shrink: 0; position: relative; cursor: pointer; }
-    .carousel-slide img, .carousel-slide video { width: 100%; height: 560px; object-fit: cover; display: block; }
-    #videos .carousel-slide video { height: 100%; }
-    .carousel-slide .fb-slide-thumb { width: 100%; height: 560px; background: var(--bg3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
-    .carousel-slide .fb-slide-thumb .play-ico { width: 80px; height: 80px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #000; }
-    .carousel-slide .fb-slide-thumb p { color: var(--text2); font-size: .9rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
-    .carousel-overlay { position: absolute; inset: 0; background: linear-gradient(to top,rgba(8,8,8,.7) 0%,transparent 50%); pointer-events: none; }
-    .carousel-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 70px; height: 70px; background: rgba(201,168,76,.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #000; pointer-events: none; }
-    .carousel-caption { position: absolute; bottom: 24px; left: 28px; font-size: .78rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.5); pointer-events: none; }
-    .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; background: rgba(8,8,8,.7); border: 1px solid var(--gold-b); border-radius: 50%; color: var(--gold); font-size: 1.6rem; cursor: pointer; z-index: 10; transition: all var(--t); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
-    .carousel-btn:hover { background: var(--gold); color: #000; border-color: var(--gold); }
-    .carousel-prev { left: 16px; }
-    .carousel-next { right: 16px; }
-    .carousel-dots { display: flex; justify-content: center; gap: 8px; padding: 20px 0 4px; flex-wrap: wrap; }
-    .carousel-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); border: none; cursor: pointer; transition: all var(--t); padding: 0; }
-    .carousel-dot.active { background: var(--gold); width: 22px; border-radius: 3px; }
-    .carousel-counter { text-align: center; color: var(--text3); font-size: .72rem; letter-spacing: 2px; margin-bottom: 12px; }
-
-    /* ── VIDEOS SECTION ── */
-    #videos { background: var(--bg); }
-    #videos .carousel-wrap { max-width: 340px; }
-    #videos .carousel-slide { aspect-ratio: 9/16; max-height: 62vh; }
-    #videos .carousel-slide video { width: 100%; height: 100%; object-fit: contain; background: #000; }
-
-    /* ── LIVE SECTION ── */
-    #en-vivo { background: var(--bg2); display: none; }
-    #en-vivo.live-active { display: block; }
-    .live-wrap { max-width: 880px; margin: 0 auto; border-radius: var(--radius); overflow: hidden; border: 1px solid rgba(230,57,70,.3); background: var(--bg3); }
-    .live-bar { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px; background: rgba(230,57,70,.1); border-bottom: 1px solid rgba(230,57,70,.25); }
-    .live-dot { width: 9px; height: 9px; background: var(--red); border-radius: 50%; animation: pulse 1.4s ease infinite; }
-    @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(230,57,70,.7)} 50%{box-shadow:0 0 0 8px rgba(230,57,70,0)} }
-    .live-label { font-size: .78rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: var(--red); }
-    .fb-wrap { width: 100%; min-height: 380px; display: flex; align-items: center; justify-content: center; padding: 20px; }
-    .fb-wrap .fb-video { width: 100%; }
-
-    /* ── ABOUT ── */
-    #nosotros { background: var(--bg2); }
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; max-width: 1200px; margin: 0 auto; }
-    .about-img-wrap { position: relative; border-radius: var(--radius); overflow: hidden; }
-    .about-img-wrap img { width: 100%; display: block; border-radius: var(--radius); filter: grayscale(15%); }
-    .about-frame { position: absolute; inset: -12px; border: 1px solid var(--gold); border-radius: var(--radius); z-index: -1; opacity: .25; }
-    .about-tag { color: var(--gold); font-size: .7rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; display: block; }
-    .about-title { font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 900; line-height: 1.15; margin-bottom: 22px; }
-    .about-text { color: var(--text2); font-size: .92rem; line-height: 1.95; margin-bottom: 18px; }
-    .about-list { list-style: none; margin-bottom: 38px; }
-    .about-list li { padding: 10px 0; color: var(--text2); font-size: .88rem; border-bottom: 1px solid rgba(255,255,255,.04); display: flex; align-items: center; gap: 12px; }
-    .about-list li::before { content: '✦'; color: var(--gold); font-size: .55rem; }
-
-    /* ── CONTACT ── */
-    #contacto { background: var(--bg); }
-    .contact-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px; max-width: 1100px; margin: 0 auto; align-items: start; }
-    .c-info h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 10px; }
-    .c-info p { color: var(--text2); line-height: 1.85; margin-bottom: 36px; }
-    .c-item { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
-    .c-icon { width: 46px; height: 46px; background: var(--gold-a); border: 1px solid var(--gold-b); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0; }
-    .c-label { font-size: .68rem; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
-    .c-value { font-size: .92rem; font-weight: 600; }
-    .c-value a { color: var(--text); text-decoration: none; transition: color var(--t); }
-    .c-value a:hover { color: var(--gold); }
-    .c-form { background: var(--bg3); border: 1px solid var(--gold-b); border-radius: var(--radius); padding: 42px; }
-    .fg { margin-bottom: 18px; }
-    .fg label { display: block; font-size: .72rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text2); margin-bottom: 9px; }
-    .fg input, .fg select, .fg textarea { width: 100%; background: var(--bg); border: 1px solid var(--gold-b); border-radius: 8px; padding: 13px 16px; color: var(--text); font-family: var(--font); font-size: .88rem; transition: border-color var(--t); outline: none; }
-    .fg input:focus, .fg select:focus, .fg textarea:focus { border-color: var(--gold); }
-    .fg textarea { resize: vertical; min-height: 110px; }
-    .fg select option { background: var(--bg); }
-    .form-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .btn-wa { background: #25D366; color: #fff; border: none; border-radius: 8px; padding: 14px 10px; font-family: var(--font); font-size: .82rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all var(--t); display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .btn-wa:hover { background: #1ebe5a; transform: translateY(-2px); }
-    .btn-sms { background: var(--gold); color: #000; border: none; border-radius: 8px; padding: 14px 10px; font-family: var(--font); font-size: .82rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all var(--t); display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .btn-sms:hover { background: var(--gold2); transform: translateY(-2px); }
-    .btn-email { background: var(--gold); color: #000; border: none; border-radius: 8px; padding: 16px; font-family: var(--font); font-size: .88rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: all var(--t); display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; }
-    .btn-email:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(201,168,76,.3); }
-
-    /* ── FOOTER ── */
-    footer { background: var(--bg2); border-top: 1px solid var(--gold-b); padding: 60px 5% 30px; }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; max-width: 1200px; margin: 0 auto 50px; }
-    .ft-brand p { color: var(--text3); font-size: .84rem; line-height: 1.85; max-width: 300px; }
-    .ft-col h4 { font-size: .72rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
-    .ft-col ul { list-style: none; }
-    .ft-col ul li { margin-bottom: 10px; }
-    .ft-col ul li a { color: var(--text3); text-decoration: none; font-size: .84rem; transition: color var(--t); }
-    .ft-col ul li a:hover { color: var(--text); }
-    .footer-bottom { max-width: 1200px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,.05); padding-top: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
-    .footer-bottom p { color: var(--text3); font-size: .76rem; }
-    .social-links { display: flex; gap: 12px; }
-    .social-links a { width: 38px; height: 38px; background: var(--bg3); border: 1px solid var(--gold-b); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text2); text-decoration: none; font-size: .85rem; font-weight: 700; transition: all var(--t); }
-    .social-links a:hover { background: var(--gold-a); border-color: var(--gold); color: var(--gold); }
-
-    /* ── FLOATING BUTTONS ── */
-    .wa-float  { position: fixed; bottom: 30px;  right: 30px; z-index: 900; width: 62px; height: 62px; background: #1a9e4a; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 3px 12px rgba(0,0,0,.35); transition: transform var(--t), box-shadow var(--t); animation: none !important; }
-    .wa-float:hover  { transform: scale(1.08); box-shadow: 0 5px 18px rgba(0,0,0,.45); }
-    .sms-float { position: fixed; bottom: 106px; right: 30px; z-index: 900; width: 62px; height: 62px; background: #2a6db5; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 3px 12px rgba(0,0,0,.35); transition: transform var(--t), box-shadow var(--t); }
-    .sms-float:hover { transform: scale(1.08); box-shadow: 0 5px 18px rgba(0,0,0,.45); }
-
-    /* ── LIGHTBOX ── */
-    #lightbox { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,.97); align-items: center; justify-content: center; padding: 20px; }
-    #lightbox.open { display: flex; }
-    #lb-img { max-width: 88vw; max-height: 84vh; border-radius: var(--radius); object-fit: contain; }
-    #lb-video { max-width: 88vw; max-height: 84vh; border-radius: var(--radius); display: none; }
-    #lb-fb { display: none; width: min(800px,90vw); }
-    #lb-close { position: fixed; top: 18px; right: 22px; background: rgba(0,0,0,.5); border: 1px solid rgba(255,255,255,.15); border-radius: 50%; width: 42px; height: 42px; color: var(--text); cursor: pointer; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; transition: all var(--t); }
-    #lb-close:hover { background: rgba(255,255,255,.15); }
-    .lb-arrow { position: fixed; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; background: rgba(0,0,0,.6); border: 1px solid var(--gold-b); border-radius: 50%; color: var(--gold); font-size: 1.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all var(--t); z-index: 2001; backdrop-filter: blur(8px); }
-    .lb-arrow:hover { background: var(--gold); color: #000; border-color: var(--gold); }
-    #lb-prev { left: 16px; }
-    #lb-next { right: 16px; }
-    #lb-counter { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,.4); font-size: .75rem; letter-spacing: 2px; font-family: var(--font); }
-
-    /* ── REVEAL ── */
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s} .d4{transition-delay:.4s} .d5{transition-delay:.5s}
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .stats-grid { grid-template-columns: repeat(2,1fr); }
-      .about-grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr; gap: 36px; }
-    }
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .nav-controls { display: none; }
-      .hamburger { display: flex; }
-      section { padding: 80px 5%; }
-      #stats { padding: 50px 5%; }
-    }
-    @media (max-width: 480px) {
-      .c-form { padding: 26px 18px; }
-      .hero-btns { flex-direction: column; align-items: center; }
-      .form-btns { grid-template-columns: 1fr; }
-      .carousel-slide img, .carousel-slide video, .carousel-slide .fb-slide-thumb { height: 280px; }
-    }
-  </style>
+  <!-- Schema.org LocalBusiness -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Sonar Pro Audio",
+    "description": "Professional sound, video and lighting production in California.",
+    "url": "https://www.sonarproaudio.com",
+    "telephone": "+1-209-603-1081",
+    "address": {
+      "@type": "PostalAddress",
+      "addressRegion": "CA",
+      "addressCountry": "US"
+    },
+    "sameAs": [
+      "https://facebook.com/nazario.rojas.9",
+      "https://www.instagram.com/nazario_sonar/"
+    ],
+    "priceRange": "$$"
+  }
+  </script>
 </head>
 <body>
 
 <div id="loader"><div class="loader-ring"></div></div>
-<a href="https://wa.me/12096031081" target="_blank" rel="noopener" class="wa-float" aria-label="WhatsApp">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="white">
+
+<!-- Floating WhatsApp -->
+<a href="https://wa.me/12096031081" target="_blank" rel="noopener noreferrer" class="wa-float" aria-label="Contactar por WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="white" aria-hidden="true">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
   </svg>
 </a>
-<a href="sms:+12096031081" class="sms-float" aria-label="SMS">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="white">
+
+<!-- Floating SMS -->
+<a href="sms:+12096031081" class="sms-float" aria-label="Contactar por SMS">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="white" aria-hidden="true">
     <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12zM7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/>
   </svg>
 </a>
@@ -289,7 +75,7 @@
 <!-- NAV -->
 <nav id="navbar">
   <a href="#hero" class="nav-logo">
-    <img src="img/Logo.PNG" alt="Logo">
+    <img src="img/Logo.PNG" alt="Sonar Pro Audio">
   </a>
   <ul class="nav-links">
     <li><a href="#nosotros"  data-i18n="navAbout">Nosotros</a></li>
@@ -299,53 +85,56 @@
     <li><a href="#contacto"  class="nav-cta" data-i18n="navQuote">Cotizar</a></li>
   </ul>
   <div class="nav-controls">
-    <button class="nav-ctrl-btn" id="themeBtn" onclick="toggleTheme()">☀️ Claro</button>
-    <button class="nav-ctrl-btn" id="langBtn"  onclick="toggleLang()">EN</button>
+    <button class="nav-ctrl-btn" data-theme-btn aria-label="Cambiar tema">&#9728;&#65039; Claro</button>
+    <button class="nav-ctrl-btn" data-lang-btn  aria-label="Cambiar idioma">EN</button>
   </div>
-  <button class="hamburger" id="hamburger" aria-label="Menú">
+  <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Menú de navegación">
   <a href="#nosotros"  class="mob-link">Nosotros</a>
   <a href="#servicios" class="mob-link">Servicios</a>
   <a href="#galeria"   class="mob-link">Galería</a>
   <a href="#videos"    class="mob-link">Videos</a>
   <a href="#contacto"  class="mob-link">Cotizar</a>
   <div class="mob-controls">
-    <button class="nav-ctrl-btn" onclick="toggleTheme();closeMob()" id="mobTheme">☀️ Claro</button>
-    <button class="nav-ctrl-btn" onclick="toggleLang();closeMob()"  id="mobLang">EN</button>
+    <button class="nav-ctrl-btn" data-theme-btn data-close-menu aria-label="Cambiar tema">&#9728;&#65039; Claro</button>
+    <button class="nav-ctrl-btn" data-lang-btn  data-close-menu aria-label="Cambiar idioma">EN</button>
   </div>
 </div>
 
 <!-- HERO -->
 <section id="hero">
-  <video id="hero-video" autoplay muted loop playsinline>
+  <video id="hero-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
     <source src="video/presentacion.mp4" type="video/mp4">
   </video>
-  <div class="hero-overlay"></div>
+  <div class="hero-overlay" aria-hidden="true"></div>
   <div class="hero-content">
     <div class="hero-badge" data-i18n="heroBadge">#1 en California</div>
-    <h1 class="hero-title" id="heroTitle">
+    <h1 class="hero-title" data-i18n="heroTitle">
       EXCELENCIA<br><span class="gold">EN CADA EVENTO</span>
     </h1>
-    <p class="hero-sub">Sound · Video · Lighting</p>
+    <p class="hero-sub">Sound &#183; Video &#183; Lighting</p>
     <p class="hero-desc" data-i18n="heroDesc">
       Producción profesional de sonido, video e iluminación.<br>
       Más de 10 años siendo los #1 en California.
     </p>
     <div class="hero-btns">
-      <a href="#galeria"  class="btn-gold"    data-i18n="heroCta1">▶ Ver Nuestro Trabajo</a>
+      <a href="#galeria"  class="btn-gold"    data-i18n="heroCta1">&#9654; Ver Nuestro Trabajo</a>
       <a href="#contacto" class="btn-outline" data-i18n="heroCta2">Cotizar Evento</a>
     </div>
   </div>
-  <div class="hero-scroll"><span>Scroll</span><div class="scroll-line"></div></div>
+  <div class="hero-scroll" aria-hidden="true">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
 </section>
 
 <!-- STATS -->
-<div id="stats">
+<div id="stats" role="region" aria-label="Estadísticas">
   <div class="stats-grid">
     <div class="stat-item reveal">
       <div class="stat-num" data-count="10">0</div>
@@ -369,41 +158,41 @@
 <!-- SERVICIOS -->
 <section id="servicios">
   <div class="section-hd reveal">
-    <span class="s-tag" data-i18n="srvTag">Lo que hacemos</span>
-    <h2 class="s-title" data-i18n="srvTitle">Nuestros Servicios</h2>
-    <p class="s-desc" data-i18n="srvDesc">Equipo profesional de nivel mundial para que tu evento sea perfecto.</p>
+    <span class="s-tag"  data-i18n="srvTag">Lo que hacemos</span>
+    <h2   class="s-title" data-i18n="srvTitle">Nuestros Servicios</h2>
+    <p    class="s-desc"  data-i18n="srvDesc">Equipo profesional de nivel mundial para que tu evento sea perfecto.</p>
     <div class="gold-line"></div>
   </div>
   <div class="srv-grid">
     <div class="srv-card reveal">
-      <span class="srv-icon">🎤</span>
+      <span class="srv-icon" aria-hidden="true">&#127908;</span>
       <h3 class="srv-title" data-i18n="srv1T">Renta de Escenario</h3>
-      <p class="srv-desc"  data-i18n="srv1D">Estructuras profesionales para conciertos, festivales y eventos de gran escala en todo California.</p>
+      <p  class="srv-desc"  data-i18n="srv1D">Estructuras profesionales para conciertos, festivales y eventos de gran escala en todo California.</p>
     </div>
     <div class="srv-card reveal d1">
-      <span class="srv-icon">💡</span>
+      <span class="srv-icon" aria-hidden="true">&#128161;</span>
       <h3 class="srv-title" data-i18n="srv2T">Iluminación</h3>
-      <p class="srv-desc"  data-i18n="srv2D">Sistemas de luces que transforman cualquier espacio en un espectáculo visual único.</p>
+      <p  class="srv-desc"  data-i18n="srv2D">Sistemas de luces que transforman cualquier espacio en un espectáculo visual único.</p>
     </div>
     <div class="srv-card reveal d2">
-      <span class="srv-icon">📺</span>
+      <span class="srv-icon" aria-hidden="true">&#128250;</span>
       <h3 class="srv-title" data-i18n="srv3T">Pantallas LED</h3>
-      <p class="srv-desc"  data-i18n="srv3D">Pantallas de alta resolución para presentaciones, conciertos y eventos corporativos.</p>
+      <p  class="srv-desc"  data-i18n="srv3D">Pantallas de alta resolución para presentaciones, conciertos y eventos corporativos.</p>
     </div>
     <div class="srv-card reveal d3">
-      <span class="srv-icon">🔊</span>
+      <span class="srv-icon" aria-hidden="true">&#128266;</span>
       <h3 class="srv-title" data-i18n="srv4T">Equipo de Audio</h3>
-      <p class="srv-desc"  data-i18n="srv4D">Sonido cristalino y potente para cualquier tamaño de evento o recinto.</p>
+      <p  class="srv-desc"  data-i18n="srv4D">Sonido cristalino y potente para cualquier tamaño de evento o recinto.</p>
     </div>
     <div class="srv-card reveal d4">
-      <span class="srv-icon">🎧</span>
+      <span class="srv-icon" aria-hidden="true">&#127911;</span>
       <h3 class="srv-title" data-i18n="srv5T">Consolas DJ</h3>
-      <p class="srv-desc"  data-i18n="srv5D">Equipo de DJ profesional para fiestas, clubs y eventos privados de todo nivel.</p>
+      <p  class="srv-desc"  data-i18n="srv5D">Equipo de DJ profesional para fiestas, clubs y eventos privados de todo nivel.</p>
     </div>
     <div class="srv-card reveal d5">
-      <span class="srv-icon">🎬</span>
+      <span class="srv-icon" aria-hidden="true">&#127916;</span>
       <h3 class="srv-title" data-i18n="srv6T">Producción Completa</h3>
-      <p class="srv-desc"  data-i18n="srv6D">Paquetes integrales con todo incluido: sonido, video y luces para eventos perfectos.</p>
+      <p  class="srv-desc"  data-i18n="srv6D">Paquetes integrales con todo incluido: sonido, video y luces para eventos perfectos.</p>
     </div>
   </div>
 </section>
@@ -411,84 +200,60 @@
 <!-- VIDEOS -->
 <section id="videos">
   <div class="section-hd reveal">
-    <span class="s-tag" data-i18n="vidTag">Sonar en Acción</span>
-    <h2 class="s-title" data-i18n="vidTitle">Videos</h2>
-    <p class="s-desc"   data-i18n="vidDesc">Mira lo que hacemos en cada evento.</p>
+    <span class="s-tag"  data-i18n="vidTag">Sonar en Acción</span>
+    <h2   class="s-title" data-i18n="vidTitle">Videos</h2>
+    <p    class="s-desc"  data-i18n="vidDesc">Mira lo que hacemos en cada evento.</p>
     <div class="gold-line"></div>
   </div>
-  <div class="carousel-counter" id="vidCounter"></div>
-  <div class="carousel-wrap">
+  <div class="carousel-counter" id="vidCounter" aria-live="polite"></div>
+  <div class="carousel-wrap" role="region" aria-label="Carrusel de videos" aria-roledescription="carousel">
     <div class="carousel-track" id="vidTrack"></div>
-    <button class="carousel-btn carousel-prev" onclick="vidMove(-1)">‹</button>
-    <button class="carousel-btn carousel-next" onclick="vidMove(1)">›</button>
+    <button class="carousel-btn carousel-prev" id="vidPrev" aria-label="Video anterior">&#8249;</button>
+    <button class="carousel-btn carousel-next" id="vidNext" aria-label="Video siguiente">&#8250;</button>
   </div>
   <div class="carousel-dots" id="vidDots"></div>
 </section>
 
-<!-- GALERÍA IMÁGENES -->
+<!-- GALERÍA -->
 <section id="galeria" style="background:var(--bg2)">
   <div class="section-hd reveal">
-    <span class="s-tag" data-i18n="galTag">Nuestro Trabajo</span>
-    <h2 class="s-title" data-i18n="galTitle">Galería</h2>
-    <p class="s-desc"   data-i18n="galDesc">Momentos capturados de los eventos que hemos hecho posibles en California.</p>
+    <span class="s-tag"  data-i18n="galTag">Nuestro Trabajo</span>
+    <h2   class="s-title" data-i18n="galTitle">Galería</h2>
+    <p    class="s-desc"  data-i18n="galDesc">Momentos capturados de los eventos que hemos hecho posibles en California.</p>
     <div class="gold-line"></div>
   </div>
-  <div class="carousel-counter" id="imgCounter"></div>
-  <div class="carousel-wrap">
+  <div class="carousel-counter" id="imgCounter" aria-live="polite"></div>
+  <div class="carousel-wrap" role="region" aria-label="Galería de fotos" aria-roledescription="carousel">
     <div class="carousel-track" id="imgTrack"></div>
-    <button class="carousel-btn carousel-prev" onclick="imgMove(-1)">‹</button>
-    <button class="carousel-btn carousel-next" onclick="imgMove(1)">›</button>
+    <button class="carousel-btn carousel-prev" id="imgPrev" aria-label="Foto anterior">&#8249;</button>
+    <button class="carousel-btn carousel-next" id="imgNext" aria-label="Foto siguiente">&#8250;</button>
   </div>
   <div class="carousel-dots" id="imgDots"></div>
 </section>
 
-<!-- EN VIVO (solo visible cuando hay live activo) -->
-<section id="en-vivo">
-  <div class="section-hd reveal">
-    <span class="s-tag" data-i18n="liveTag">En Este Momento</span>
-    <h2 class="s-title" data-i18n="liveTitle">🔴 Transmisión en Vivo</h2>
-    <div class="gold-line"></div>
-  </div>
-  <div class="live-wrap reveal">
-    <div class="live-bar">
-      <div class="live-dot"></div>
-      <span class="live-label" data-i18n="liveLabel">Transmisión en Vivo</span>
-    </div>
-    <div class="fb-wrap" id="fbWrap"></div>
-  </div>
-</section>
-
 <!-- NOSOTROS -->
-<section id="nosotros" style="background:var(--bg2)">
-  <div class="about-grid">
-    <div class="reveal">
-      <div class="about-img-wrap">
-        <img src="img/about.jpg" alt="" onerror="this.parentElement.style.display='none'">
-        <div class="about-frame"></div>
-      </div>
-    </div>
-    <div>
-      <span class="about-tag reveal" data-i18n="aboutTag">Nuestra Historia</span>
-      <h2 class="about-title reveal" id="aboutTitle">Más de 10 años<br><span style="color:var(--gold)">siendo los mejores</span></h2>
-      <p class="about-text reveal" data-i18n="aboutT1">Somos la empresa #1 en producción de sonido, video e iluminación en California. Con más de una década de experiencia, hemos llevado nuestro equipo profesional a cientos de eventos en todo el estado.</p>
-      <p class="about-text reveal" data-i18n="aboutT2">Desde pequeñas reuniones hasta festivales con miles de personas, nuestro compromiso con la excelencia es lo que nos hace únicos y los más solicitados en California.</p>
-      <ul class="about-list reveal">
-        <li data-i18n="aboutL1">Equipo de sonido de nivel mundial</li>
-        <li data-i18n="aboutL2">Técnicos especializados con años de experiencia</li>
-        <li data-i18n="aboutL3">Servicio personalizado para cada evento</li>
-        <li data-i18n="aboutL4">Disponibles en todo California y más</li>
-      </ul>
-      <a href="#contacto" class="btn-gold reveal" data-i18n="aboutBtn">Contáctanos →</a>
-    </div>
+<section id="nosotros">
+  <div class="about-content">
+    <span class="about-tag reveal"   data-i18n="aboutTag">Nuestra Historia</span>
+    <h2   class="about-title reveal" data-i18n="aboutTitle">Más de 10 años<br><span style="color:var(--gold)">siendo los mejores</span></h2>
+    <p    class="about-text reveal"  data-i18n="aboutT1">Somos la empresa #1 en producción de sonido, video e iluminación en California. Con más de una década de experiencia, hemos llevado nuestro equipo profesional a cientos de eventos en todo el estado.</p>
+    <p    class="about-text reveal"  data-i18n="aboutT2">Desde pequeñas reuniones hasta festivales con miles de personas, nuestro compromiso con la excelencia es lo que nos hace únicos y los más solicitados en California.</p>
+    <ul class="about-list reveal">
+      <li data-i18n="aboutL1">Equipo de sonido de nivel mundial</li>
+      <li data-i18n="aboutL2">Técnicos especializados con años de experiencia</li>
+      <li data-i18n="aboutL3">Servicio personalizado para cada evento</li>
+      <li data-i18n="aboutL4">Disponibles en todo California y más</li>
+    </ul>
+    <a href="#contacto" class="btn-gold reveal" data-i18n="aboutBtn">Contáctanos &#8594;</a>
   </div>
 </section>
 
 <!-- CONTACTO -->
 <section id="contacto">
   <div class="section-hd reveal">
-    <span class="s-tag" data-i18n="ctaTag">Escríbenos</span>
-    <h2 class="s-title" data-i18n="ctaTitle">¿Tienes un Evento?</h2>
-    <p class="s-desc"   data-i18n="ctaDesc">Cuéntanos qué necesitas y te preparamos una cotización sin costo.</p>
+    <span class="s-tag"  data-i18n="ctaTag">Escríbenos</span>
+    <h2   class="s-title" data-i18n="ctaTitle">¿Tienes un Evento?</h2>
+    <p    class="s-desc"  data-i18n="ctaDesc">Cuéntanos qué necesitas y te preparamos una cotización sin costo.</p>
     <div class="gold-line"></div>
   </div>
   <div class="contact-grid">
@@ -496,46 +261,47 @@
       <h3 data-i18n="ctaH3">Hablemos</h3>
       <p  data-i18n="ctaP">Estamos listos para hacer de tu evento algo que nadie olvidará.</p>
       <div class="c-item">
-        <div class="c-icon">📍</div>
+        <div class="c-icon" aria-hidden="true">&#128205;</div>
         <div>
           <div class="c-label" data-i18n="locLabel">Ubicación</div>
           <div class="c-value">California, USA</div>
         </div>
       </div>
       <div class="c-item">
-        <div class="c-icon">💬</div>
+        <div class="c-icon" aria-hidden="true">&#128172;</div>
         <div>
           <div class="c-label">WhatsApp / SMS</div>
           <div class="c-value"><a href="https://wa.me/12096031081">+1 (209) 603-1081</a></div>
         </div>
       </div>
       <div class="c-item">
-        <div class="c-icon">📸</div>
+        <div class="c-icon" aria-hidden="true">&#128248;</div>
         <div>
           <div class="c-label">Instagram</div>
-          <div class="c-value"><a href="https://www.instagram.com/nazario_sonar/" target="_blank">@nazario_sonar</a></div>
+          <div class="c-value"><a href="https://www.instagram.com/nazario_sonar/" target="_blank" rel="noopener">@nazario_sonar</a></div>
         </div>
       </div>
       <div class="c-item">
-        <div class="c-icon">📘</div>
+        <div class="c-icon" aria-hidden="true">&#128216;</div>
         <div>
           <div class="c-label">Facebook</div>
-          <div class="c-value"><a href="https://facebook.com/nazario.rojas.9" target="_blank">Nazario Rojas</a></div>
+          <div class="c-value"><a href="https://facebook.com/nazario.rojas.9" target="_blank" rel="noopener">Nazario Rojas</a></div>
         </div>
       </div>
     </div>
+
     <div class="c-form reveal d2">
       <div class="fg">
-        <label data-i18n="fLblName">Nombre</label>
-        <input type="text" id="fName" data-i18n-ph="fPhName" placeholder="Tu nombre completo">
+        <label for="fName"  data-i18n="fLblName">Nombre</label>
+        <input type="text"  id="fName"  data-i18n-ph="fPhName"  placeholder="Tu nombre completo" autocomplete="name" required>
       </div>
       <div class="fg">
-        <label data-i18n="fLblPhone">Teléfono</label>
-        <input type="tel" id="fPhone" placeholder="+1 (209) 603-1081">
+        <label for="fPhone" data-i18n="fLblPhone">Teléfono</label>
+        <input type="tel"   id="fPhone" placeholder="+1 (209) 603-1081" autocomplete="tel">
       </div>
       <div class="fg">
-        <label data-i18n="fLblEvent">Tipo de Evento</label>
-        <select id="fEvent">
+        <label for="fEvent" data-i18n="fLblEvent">Tipo de Evento</label>
+        <select id="fEvent" required>
           <option value="" data-i18n="fOpt0">Seleccionar...</option>
           <option data-i18n="fOpt1">Concierto / Festival</option>
           <option data-i18n="fOpt2">Quinceañera</option>
@@ -546,10 +312,24 @@
         </select>
       </div>
       <div class="fg">
-        <label data-i18n="fLblMsg">Mensaje</label>
+        <label for="fMsg"   data-i18n="fLblMsg">Mensaje</label>
         <textarea id="fMsg" data-i18n-ph="fPhMsg" placeholder="Cuéntanos sobre tu evento: fecha, lugar, número de personas..."></textarea>
       </div>
-      <button class="btn-email" onclick="sendEmail()"><i class="fa-solid fa-envelope"></i> <span data-i18n="fBtnEmail">Enviar Cotización</span></button>
+      <p id="formNotice" class="form-notice" role="alert"></p>
+      <div class="form-actions">
+        <button class="btn-wa" id="btnWa">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="white" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          <span data-i18n="fBtnWa">Cotización por WhatsApp</span>
+        </button>
+        <button class="btn-email" id="btnEmail">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+          </svg>
+          <span data-i18n="fBtnEmail">Cotización por Email</span>
+        </button>
+      </div>
     </div>
   </div>
 </section>
@@ -563,7 +343,7 @@
     <div class="ft-col">
       <h4 data-i18n="ftSrvTitle">Servicios</h4>
       <ul>
-        <li><a href="#servicios" data-i18n="srv1T">Audio Profesional</a></li>
+        <li><a href="#servicios" data-i18n="srv1T">Renta de Escenario</a></li>
         <li><a href="#servicios" data-i18n="srv2T">Iluminación</a></li>
         <li><a href="#servicios" data-i18n="srv3T">Pantallas LED</a></li>
         <li><a href="#servicios" data-i18n="srv5T">Consolas DJ</a></li>
@@ -573,432 +353,47 @@
     <div class="ft-col">
       <h4 data-i18n="ftCtTitle">Contacto</h4>
       <ul>
-        <li><a href="#contacto"  data-i18n="navQuote">Cotizar</a></li>
-        <li><a href="https://wa.me/12096031081" target="_blank">WhatsApp</a></li>
-        <li><a href="https://www.instagram.com/nazario_sonar/" target="_blank">Instagram</a></li>
-        <li><a href="https://facebook.com/nazario.rojas.9" target="_blank">Facebook</a></li>
+        <li><a href="#contacto"                                              data-i18n="navQuote">Cotizar</a></li>
+        <li><a href="https://wa.me/12096031081"        target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="https://www.instagram.com/nazario_sonar/" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://facebook.com/nazario.rojas.9"     target="_blank" rel="noopener">Facebook</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <p data-i18n="ftCopy">© 2025 · California · Todos los derechos reservados</p>
-    <a href="admin.html" style="color:var(--text2);font-size:.75rem;text-decoration:none;border:1px solid var(--gold-b);padding:5px 12px;border-radius:6px;transition:all .3s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='';this.style.color='var(--text2)'">🔒 Admin</a>
+    <p data-i18n="ftCopy">&#169; 2026 &#183; California &#183; Todos los derechos reservados</p>
     <div class="social-links">
-      <a href="https://facebook.com/nazario.rojas.9" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i></a>
-      <a href="https://www.instagram.com/nazario_sonar/"  target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i></a>
-      <a href="https://wa.me/12096031081"            target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i></a>
+      <a href="https://facebook.com/nazario.rojas.9"        target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+        </svg>
+      </a>
+      <a href="https://www.instagram.com/nazario_sonar/"    target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-linecap="round"/>
+        </svg>
+      </a>
+      <a href="https://wa.me/12096031081"                   target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+      </a>
     </div>
   </div>
 </footer>
 
 <!-- LIGHTBOX -->
-<div id="lightbox">
-  <button id="lb-close" onclick="closeLb()">×</button>
-  <button class="lb-arrow" id="lb-prev" onclick="lbMove(-1)">‹</button>
-  <button class="lb-arrow" id="lb-next" onclick="lbMove(1)">›</button>
-  <img    id="lb-img"   src="" alt="">
-  <video  id="lb-video" controls muted></video>
-  <div    id="lb-fb"></div>
-  <div    id="lb-counter"></div>
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Visor de contenido">
+  <button id="lb-close" aria-label="Cerrar visor">&#215;</button>
+  <button class="lb-arrow" id="lb-prev" aria-label="Anterior">&#8249;</button>
+  <button class="lb-arrow" id="lb-next" aria-label="Siguiente">&#8250;</button>
+  <img   id="lb-img"   src="" alt="">
+  <video id="lb-video" controls></video>
+  <div   id="lb-counter" aria-live="polite"></div>
 </div>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage-compat.js"></script>
-
-<script>
-const firebaseConfig = {
-  apiKey:            "AIzaSyCVa5Qe2LBNr3jVjPTjbZJ9Ju5n9ZzsRUg",
-  authDomain:        "sonarproaudio.firebaseapp.com",
-  projectId:         "sonarproaudio",
-  storageBucket:     "sonarproaudio.firebasestorage.app",
-  messagingSenderId: "661813986043",
-  appId:             "1:661813986043:web:985235871795ac84d9665e"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// ── LOADER ──
-window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('hidden'), 500));
-
-// ── NAV SCROLL ──
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 55));
-
-// ── HAMBURGER ──
-const hamburger  = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobileMenu');
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  mobileMenu.classList.toggle('open');
-  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
-});
-document.querySelectorAll('.mob-link').forEach(l => l.addEventListener('click', closeMob));
-function closeMob() {
-  hamburger.classList.remove('open');
-  mobileMenu.classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-// ── COUNTER ANIMATION ──
-function animateCount(el, target) {
-  let start = null;
-  const step = ts => {
-    if (!start) start = ts;
-    const p = Math.min((ts - start) / 1800, 1);
-    el.textContent = (target >= 1000 ? Math.floor(p*target).toLocaleString() : Math.floor(p*target)) + '+';
-    if (p < 1) requestAnimationFrame(step);
-    else el.textContent = (target >= 1000 ? target.toLocaleString() : target) + '+';
-  };
-  requestAnimationFrame(step);
-}
-
-// ── REVEAL ON SCROLL ──
-const revealObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    e.target.classList.add('visible');
-    const counter = e.target.querySelector('[data-count]') || (e.target.hasAttribute('data-count') ? e.target : null);
-    if (counter && !counter.dataset.animated) {
-      counter.dataset.animated = '1';
-      animateCount(counter, parseInt(counter.dataset.count));
-    }
-  });
-}, { threshold: 0.15 });
-document.querySelectorAll('.reveal, .stat-item').forEach(el => revealObs.observe(el));
-
-// ══════════════════════════════════
-//  IMAGE CAROUSEL
-// ══════════════════════════════════
-const STATIC_PHOTOS = Array.from({length:15}, (_,i) => ({ type:'photo', url:`img/galeria${i+1}.jpeg`, title:'' }));
-let imgItems = [...STATIC_PHOTOS], imgIndex = 0, imgTimer = null;
-buildImgCarousel();
-
-fetch('https://api.github.com/repos/sonarproaudio/websonar/contents/img')
-  .then(r => r.json())
-  .then(files => {
-    if (!Array.isArray(files)) return;
-    const photos = files
-      .filter(f => /\.(jpe?g|png|webp)$/i.test(f.name) && !/^logo/i.test(f.name))
-      .map(f => ({ type:'photo', url:`img/${f.name}`, title:'' }));
-    if (photos.length) { imgItems = photos; buildImgCarousel(); }
-  })
-  .catch(() => {});
-
-function buildImgCarousel() {
-  const track = document.getElementById('imgTrack');
-  const dots  = document.getElementById('imgDots');
-  if (!imgItems.length) return;
-  track.innerHTML = ''; dots.innerHTML = '';
-  imgItems.forEach((item, i) => {
-    const slide = document.createElement('div');
-    slide.className = 'carousel-slide';
-    slide.innerHTML = `<img src="${item.url}" alt="" loading="${i<3?'eager':'lazy'}"><div class="carousel-overlay"></div>`;
-    slide.addEventListener('click', () => openLbImg(i, imgItems));
-    track.appendChild(slide);
-    const dot = document.createElement('button');
-    dot.className = 'carousel-dot' + (i===0?' active':'');
-    dot.addEventListener('click', () => imgGo(i));
-    dots.appendChild(dot);
-  });
-  imgGo(0);
-  clearInterval(imgTimer); imgTimer = setInterval(() => imgGo(imgIndex+1), 5000);
-  let sx=0;
-  track.addEventListener('touchstart', e => { sx=e.touches[0].clientX; },{passive:true});
-  track.addEventListener('touchend',   e => { const d=sx-e.changedTouches[0].clientX; if(Math.abs(d)>50) imgMove(d>0?1:-1); });
-}
-function imgGo(n) {
-  imgIndex = (n+imgItems.length)%imgItems.length;
-  document.getElementById('imgTrack').style.transform = `translateX(-${imgIndex*100}%)`;
-  document.querySelectorAll('#imgDots .carousel-dot').forEach((d,i)=>d.classList.toggle('active',i===imgIndex));
-  document.getElementById('imgCounter').textContent = `${imgIndex+1} / ${imgItems.length}`;
-}
-function imgMove(dir) { imgGo(imgIndex+dir); clearInterval(imgTimer); imgTimer=setInterval(()=>imgGo(imgIndex+1),5000); }
-
-// ══════════════════════════════════
-//  VIDEO CAROUSEL
-// ══════════════════════════════════
-const VID_ITEMS = [
-  { type:'video', url:'video/stockton_deorro.mp4', poster:'video/stockton_thumb.jpg', title:'Sonar Stockton — Deorro' }
-];
-let vidItems = [...VID_ITEMS], vidIndex = 0, vidTimer = null;
-buildVidCarousel();
-
-function buildVidCarousel() {
-  const track = document.getElementById('vidTrack');
-  const dots  = document.getElementById('vidDots');
-  if (!vidItems.length) return;
-  track.innerHTML = ''; dots.innerHTML = '';
-  vidItems.forEach((item, i) => {
-    const slide = document.createElement('div');
-    slide.className = 'carousel-slide';
-    if (item.type === 'fb-reel') {
-      slide.innerHTML = `
-        <div class="fb-slide-thumb">
-          <div class="play-ico">▶</div>
-          <p data-i18n="vidThumbLabel">${item.title}</p>
-        </div>
-        <div class="carousel-overlay"></div>`;
-    } else {
-      slide.innerHTML = `<video src="${item.url}" poster="${item.poster||''}" muted preload="none"></video><div class="carousel-overlay"></div><div class="carousel-play">▶</div>`;
-    }
-    slide.addEventListener('click', () => {
-      if (item.type === 'fb-reel') { window.open(item.url, '_blank'); } else { openLbVid(i); }
-    });
-    track.appendChild(slide);
-    const dot = document.createElement('button');
-    dot.className = 'carousel-dot' + (i===0?' active':'');
-    dot.addEventListener('click', () => vidGo(i));
-    dots.appendChild(dot);
-  });
-  vidGo(0);
-  clearInterval(vidTimer); vidTimer = setInterval(() => vidGo(vidIndex+1), 6000);
-  let sx=0;
-  track.addEventListener('touchstart', e=>{sx=e.touches[0].clientX;},{passive:true});
-  track.addEventListener('touchend',   e=>{const d=sx-e.changedTouches[0].clientX;if(Math.abs(d)>50)vidMove(d>0?1:-1);});
-}
-function vidGo(n) {
-  vidIndex = (n+vidItems.length)%vidItems.length;
-  document.getElementById('vidTrack').style.transform = `translateX(-${vidIndex*100}%)`;
-  document.querySelectorAll('#vidDots .carousel-dot').forEach((d,i)=>d.classList.toggle('active',i===vidIndex));
-  document.getElementById('vidCounter').textContent = `${vidIndex+1} / ${vidItems.length}`;
-}
-function vidMove(dir) { vidGo(vidIndex+dir); clearInterval(vidTimer); vidTimer=setInterval(()=>vidGo(vidIndex+1),6000); }
-
-// ── LIVE LISTENER ──
-db.collection('settings').doc('live').onSnapshot(doc => {
-  if (!doc.exists) return;
-  const d = doc.data();
-  const sec = document.getElementById('en-vivo');
-  if (d.isLive && d.liveUrl) {
-    sec.classList.add('live-active');
-    const wrap = document.getElementById('fbWrap');
-    wrap.innerHTML = `<div class="fb-video" data-href="${d.liveUrl}" data-width="auto" data-autoplay="true" data-show-text="false"></div>`;
-    if (window.FB) window.FB.XFBML.parse(wrap);
-  } else {
-    sec.classList.remove('live-active');
-  }
-});
-window.fbAsyncInit = function() { FB.init({xfbml:true,version:'v18.0'}); };
-
-// ══════════════════════════════════
-//  LIGHTBOX
-// ══════════════════════════════════
-let lbMode = 'img', lbItems = [], lbIndex = 0;
-
-function openLbImg(idx, items) {
-  lbMode = 'img'; lbItems = items; lbIndex = idx;
-  showLbItem();
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function openLbVid(idx) {
-  lbMode = 'vid'; lbItems = vidItems; lbIndex = idx;
-  showLbItem();
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function showLbItem() {
-  lbIndex = (lbIndex + lbItems.length) % lbItems.length;
-  const item = lbItems[lbIndex];
-  const img  = document.getElementById('lb-img');
-  const vid  = document.getElementById('lb-video');
-  const fb   = document.getElementById('lb-fb');
-  const ctr  = document.getElementById('lb-counter');
-  img.style.display='none'; vid.style.display='none'; fb.style.display='none';
-  vid.pause();
-  if (item.type === 'fb-reel') {
-    fb.style.display = 'block';
-    fb.innerHTML = `<div class="fb-video" data-href="${item.url}" data-width="734" data-show-text="false" data-autoplay="true"></div>`;
-    if (window.FB) window.FB.XFBML.parse(fb);
-  } else if (item.type === 'video') {
-    vid.src=item.url; vid.style.display='block'; vid.play();
-  } else {
-    img.src=item.url; img.style.display='block';
-  }
-  if (ctr) ctr.textContent = `${lbIndex+1} / ${lbItems.length}`;
-}
-function lbMove(dir) { lbIndex+=dir; showLbItem(); }
-function closeLb() {
-  document.getElementById('lightbox').classList.remove('open');
-  document.getElementById('lb-video').pause();
-  document.getElementById('lb-fb').innerHTML = '';
-  document.body.style.overflow = '';
-}
-document.getElementById('lightbox').addEventListener('click', e => { if(e.target===e.currentTarget) closeLb(); });
-document.addEventListener('keydown', e => {
-  if (!document.getElementById('lightbox').classList.contains('open')) return;
-  if (e.key==='Escape')     closeLb();
-  if (e.key==='ArrowLeft')  lbMove(-1);
-  if (e.key==='ArrowRight') lbMove(1);
-});
-
-// ══════════════════════════════════
-//  CONTACTO
-// ══════════════════════════════════
-function sendEmail() {
-  const name  = document.getElementById('fName').value.trim();
-  const phone = document.getElementById('fPhone').value.trim();
-  const event = document.getElementById('fEvent').value;
-  const msg   = document.getElementById('fMsg').value.trim();
-  if (!name || !event) {
-    alert(currentLang==='es'?'Por favor ingresa tu nombre y tipo de evento.':'Please enter your name and event type.');
-    return;
-  }
-  const subject = encodeURIComponent(`Cotización de Evento — ${event}`);
-  const body = encodeURIComponent(
-    `Nombre: ${name}\nTeléfono: ${phone}\nTipo de Evento: ${event}\n\nMensaje:\n${msg}`
-  );
-  window.location.href = `mailto:sonarpro@nazario_sonar.com?subject=${subject}&body=${body}`;
-}
-
-// ══════════════════════════════════
-//  TEMA OSCURO / CLARO
-// ══════════════════════════════════
-let isDark = true;
-function toggleTheme() {
-  isDark = !isDark;
-  document.body.classList.toggle('light', !isDark);
-  const label = isDark ? '☀️ Claro' : '🌙 Oscuro';
-  document.getElementById('themeBtn').textContent = label;
-  document.getElementById('mobTheme').textContent = label;
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
-}
-if (localStorage.getItem('theme') === 'light') {
-  isDark = false; document.body.classList.add('light');
-  document.getElementById('themeBtn').textContent = '🌙 Oscuro';
-  document.getElementById('mobTheme').textContent = '🌙 Oscuro';
-}
-
-// ══════════════════════════════════
-//  IDIOMA ES / EN
-// ══════════════════════════════════
-let currentLang = 'es';
-const T = {
-  es: {
-    navAbout:'Nosotros', navServices:'Servicios', navGallery:'Galería', navVideos:'Videos', navQuote:'Cotizar',
-    heroBadge:'#1 en California',
-    heroTitle:'EXCELENCIA<br><span class="gold">EN CADA EVENTO</span>',
-    heroDesc:'Producción profesional de sonido, video e iluminación.<br>Más de 10 años siendo los #1 en California.',
-    heroCta1:'▶ Ver Nuestro Trabajo', heroCta2:'Cotizar Evento',
-    stat1:'Años de Experiencia', stat2:'Eventos Realizados', stat3:'En California', stat4:'Soporte para tu Evento',
-    srvTag:'Lo que hacemos', srvTitle:'Nuestros Servicios', srvDesc:'Equipo profesional de nivel mundial para que tu evento sea perfecto.',
-    srv1T:'Renta de Escenario',    srv1D:'Estructuras profesionales para conciertos, festivales y eventos de gran escala.',
-    srv2T:'Iluminación',            srv2D:'Sistemas de luces que transforman cualquier espacio en un espectáculo visual único.',
-    srv3T:'Pantallas LED',          srv3D:'Pantallas de alta resolución para presentaciones y conciertos.',
-    srv4T:'Equipo de Audio',        srv4D:'Sonido cristalino y potente para cualquier tamaño de evento.',
-    srv5T:'Consolas DJ',            srv5D:'Equipo de DJ profesional para fiestas, clubs y eventos privados.',
-    srv6T:'Producción Completa',    srv6D:'Paquetes integrales con todo incluido: sonido, video y luces.',
-    galTag:'Nuestro Trabajo', galTitle:'Galería', galDesc:'Momentos capturados de los eventos que hemos hecho posibles en California.',
-    vidTag:'Sonar en Acción', vidTitle:'Videos', vidDesc:'Mira lo que hacemos en cada evento.',
-    vidThumbLabel:'Video de Presentación',
-    liveTag:'En Este Momento', liveTitle:'🔴 Transmisión en Vivo', liveLabel:'Transmisión en Vivo',
-    aboutTag:'Nuestra Historia',
-    aboutTitle:'Más de 10 años<br><span style="color:var(--gold)">siendo los mejores</span>',
-    aboutT1:'Somos la empresa #1 en producción de sonido, video e iluminación en California. Con más de una década de experiencia, hemos llevado nuestro equipo profesional a cientos de eventos.',
-    aboutT2:'Desde pequeñas reuniones hasta festivales con miles de personas, nuestro compromiso con la excelencia es lo que nos hace únicos en California.',
-    aboutL1:'Equipo de sonido de nivel mundial', aboutL2:'Técnicos especializados con años de experiencia',
-    aboutL3:'Servicio personalizado para cada evento', aboutL4:'Disponibles en todo California y más',
-    aboutBtn:'Contáctanos →',
-    ctaTag:'Escríbenos', ctaTitle:'¿Tienes un Evento?', ctaDesc:'Cuéntanos qué necesitas y te preparamos una cotización sin costo.',
-    ctaH3:'Hablemos', ctaP:'Estamos listos para hacer de tu evento algo que nadie olvidará.',
-    locLabel:'Ubicación',
-    fLblName:'Nombre', fPhName:'Tu nombre completo',
-    fLblPhone:'Teléfono', fLblEvent:'Tipo de Evento', fLblMsg:'Mensaje',
-    fPhMsg:'Cuéntanos sobre tu evento: fecha, lugar, número de personas...',
-    fOpt0:'Seleccionar...', fOpt1:'Concierto / Festival', fOpt2:'Quinceañera',
-    fOpt3:'Boda', fOpt4:'Evento Corporativo', fOpt5:'Fiesta Privada', fOpt6:'Otro',
-    fBtnEmail:'Enviar Cotización',
-    ftBrand:'Los #1 en producción de sonido, video e iluminación en California. Más de 10 años haciendo eventos inolvidables.',
-    ftSrvTitle:'Servicios', ftCtTitle:'Contacto',
-    ftCopy:'© 2025 · California · Todos los derechos reservados',
-  },
-  en: {
-    navAbout:'About', navServices:'Services', navGallery:'Gallery', navVideos:'Videos', navQuote:'Quote',
-    heroBadge:'#1 in California',
-    heroTitle:'EXCELLENCE<br><span class="gold">IN EVERY EVENT</span>',
-    heroDesc:'Professional sound, video & lighting production.<br>Over 10 years as #1 in California.',
-    heroCta1:'▶ See Our Work', heroCta2:'Get a Quote',
-    stat1:'Years of Experience', stat2:'Events Done', stat3:'In California', stat4:'Event Support',
-    srvTag:'What We Do', srvTitle:'Our Services', srvDesc:'World-class professional equipment for your perfect event.',
-    srv1T:'Stage Rental',           srv1D:'Professional stage structures for concerts, festivals and large-scale events.',
-    srv2T:'Lighting',               srv2D:'Light systems that transform any space into a unique visual spectacle.',
-    srv3T:'LED Screens',            srv3D:'High-resolution screens for presentations and concerts.',
-    srv4T:'Audio Equipment',        srv4D:'Crystal-clear powerful sound for any size event.',
-    srv5T:'DJ Consoles',            srv5D:'Professional DJ equipment for parties, clubs and private events.',
-    srv6T:'Full Production',        srv6D:'All-inclusive packages: sound, video and lighting.',
-    galTag:'Our Work', galTitle:'Gallery', galDesc:'Moments captured from events we have made possible in California.',
-    vidTag:'Sonar in Action', vidTitle:'Videos', vidDesc:'See what we do at every event.',
-    vidThumbLabel:'Presentation Video',
-    liveTag:'Right Now', liveTitle:'🔴 Live Stream', liveLabel:'Live Stream',
-    aboutTag:'Our Story',
-    aboutTitle:'Over 10 years<br><span style="color:var(--gold)">being the best</span>',
-    aboutT1:'We are the #1 company in sound, video and lighting production in California. With over a decade of experience, we have brought our professional equipment to hundreds of events.',
-    aboutT2:'From small gatherings to festivals with thousands of people, our commitment to excellence is what makes us unique in California.',
-    aboutL1:'World-class sound equipment', aboutL2:'Specialized technicians with years of experience',
-    aboutL3:'Personalized service for each event', aboutL4:'Available throughout California and beyond',
-    aboutBtn:'Contact Us →',
-    ctaTag:'Write to Us', ctaTitle:'Have an Event?', ctaDesc:'Tell us what you need and we\'ll prepare a free quote.',
-    ctaH3:'Let\'s Talk', ctaP:'We\'re ready to make your event something no one will forget.',
-    locLabel:'Location',
-    fLblName:'Name', fPhName:'Your full name',
-    fLblPhone:'Phone', fLblEvent:'Event Type', fLblMsg:'Message',
-    fPhMsg:'Tell us about your event: date, venue, number of guests...',
-    fOpt0:'Select...', fOpt1:'Concert / Festival', fOpt2:'Quinceañera',
-    fOpt3:'Wedding', fOpt4:'Corporate Event', fOpt5:'Private Party', fOpt6:'Other',
-    fBtnEmail:'Send Quote',
-    ftBrand:'#1 in sound, video & lighting production in California. Over 10 years making unforgettable events.',
-    ftSrvTitle:'Services', ftCtTitle:'Contact',
-    ftCopy:'© 2025 · California · All rights reserved',
-  }
-};
-
-function toggleLang() {
-  currentLang = currentLang === 'es' ? 'en' : 'es';
-  const label = currentLang === 'es' ? 'EN' : 'ES';
-  document.getElementById('langBtn').textContent  = label;
-  document.getElementById('mobLang').textContent  = label;
-  applyLang();
-  localStorage.setItem('lang', currentLang);
-}
-function applyLang() {
-  const t = T[currentLang];
-  // data-i18n text content
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const k = el.getAttribute('data-i18n');
-    if (t[k] !== undefined) el.innerHTML = t[k];
-  });
-  // Hero title (has HTML tags)
-  const ht = document.getElementById('heroTitle');
-  if (ht) ht.innerHTML = t.heroTitle;
-  // About title
-  const at = document.getElementById('aboutTitle');
-  if (at) at.innerHTML = t.aboutTitle;
-  // Placeholders
-  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
-    const k = el.getAttribute('data-i18n-ph');
-    if (t[k] !== undefined) el.placeholder = t[k];
-  });
-  // Mobile nav links
-  const mobs = document.querySelectorAll('.mob-link');
-  ['navAbout','navServices','navGallery','navVideos','navQuote'].forEach((k,i) => {
-    if (mobs[i] && t[k]) mobs[i].textContent = t[k];
-  });
-  // Select options
-  document.querySelectorAll('#fEvent option[data-i18n]').forEach(opt => {
-    const k = opt.getAttribute('data-i18n');
-    if (t[k] !== undefined) opt.textContent = t[k];
-  });
-}
-// Restore language
-if (localStorage.getItem('lang') === 'en') {
-  currentLang = 'en';
-  document.getElementById('langBtn').textContent = 'ES';
-  document.getElementById('mobLang').textContent = 'ES';
-  applyLang();
-}
-</script>
+<script src="js/main.js"></script>
 </body>
 </html>
