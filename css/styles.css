@@ -538,3 +538,68 @@ footer {
   .carousel-slide img,
   .carousel-slide video { height: 280px; }
 }
+
+/* ── NFC CONTACT PAGE ── */
+.nfc-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 24px 64px;
+  background: var(--bg);
+}
+
+.nfc-logo-wrap { margin-bottom: 12px; text-decoration: none; }
+.nfc-logo-img  { height: 200px; width: auto; object-fit: contain; mix-blend-mode: screen; }
+body.light .nfc-logo-img { mix-blend-mode: normal; }
+
+.nfc-company {
+  font-size: .75rem; font-weight: 800;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: var(--text2); margin-bottom: 4px;
+}
+.nfc-sub {
+  font-size: .7rem; color: var(--text3);
+  letter-spacing: 3px; text-transform: uppercase;
+  margin-bottom: 32px;
+}
+.nfc-back {
+  font-size: .78rem; font-weight: 600; color: var(--text2);
+  text-decoration: none; margin-bottom: 20px;
+  transition: color var(--t);
+}
+.nfc-back:hover { color: var(--gold); }
+
+.nfc-heading {
+  font-size: .62rem; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 16px;
+}
+
+.nfc-btns {
+  display: flex; flex-direction: column; gap: 10px;
+  width: 100%; max-width: 360px;
+}
+
+.nfc-btn {
+  display: flex; align-items: center; gap: 14px;
+  width: 100%; padding: 16px 20px;
+  border-radius: var(--radius);
+  background: var(--bg3); color: var(--text);
+  border: 1px solid var(--gold-b);
+  font-family: var(--font); font-size: .88rem; font-weight: 600;
+  text-decoration: none; cursor: pointer;
+  transition: transform .15s ease, border-color .2s ease;
+}
+.nfc-btn:hover  { transform: translateY(-2px); border-color: var(--gold); }
+.nfc-btn:active { transform: translateY(0); }
+
+.nfc-btn svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--gold); }
+
+.nfc-btn--wa svg    { color: #25d366; }
+.nfc-btn--insta svg { color: #e1306c; }
+.nfc-btn--fb svg    { color: #1877f2; }
+.nfc-btn--web svg   { color: var(--text2); }
+
+.nfc-btn__stack { display: flex; flex-direction: column; gap: 2px; }
+.nfc-btn__sub   { font-size: .72rem; font-weight: 400; color: var(--text2); }
