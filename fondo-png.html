@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quita Fondo PNG | Sonar Pro Audio</title>
+  <meta name="description" content="Quita el fondo de tus logos e imágenes gratis y al instante, directo en el navegador. Descarga un PNG transparente. Sin registro.">
+
+  <link rel="icon" href="img/Logo.PNG" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <script>if (localStorage.getItem('theme') === 'light') document.documentElement.classList.add('light-init');</script>
+  <style>.light-init body { background: #ffffff; }</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="tool-header">
+  <a href="index.html" class="nav-logo" aria-label="Volver al sitio">
+    <img src="img/Logo.PNG" alt="Sonar Pro Audio">
+  </a>
+  <div class="tool-header-ctrls">
+    <a href="herramientas.html" class="nav-ctrl-btn" data-i18n="allTools">&#8592; Herramientas</a>
+    <button class="nav-ctrl-btn" data-theme-btn aria-label="Cambiar tema">&#9728;&#65039; Claro</button>
+    <button class="nav-ctrl-btn" data-lang-btn  aria-label="Cambiar idioma">EN</button>
+  </div>
+</header>
+
+<main class="tool-page">
+
+  <div class="tool-hero rise">
+    <span class="s-tag" data-i18n="tag">Herramienta gratis</span>
+    <h1 data-i18n="title">Quita Fondo <span class="gold">PNG</span></h1>
+    <p data-i18n="sub">Sube un logo o imagen y quítale el fondo al instante. Todo pasa en tu dispositivo: tus imágenes nunca se suben a ningún servidor.</p>
+  </div>
+
+  <div class="bg-tool rise rise-1">
+
+    <!-- Zona de carga -->
+    <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Subir imagen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <strong data-i18n="dropTitle">Arrastra tu imagen aquí</strong>
+      <span data-i18n="dropSub">o toca para elegir una foto · PNG, JPG o WebP</span>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" hidden>
+
+    <!-- Resultado -->
+    <div id="resultBox" hidden>
+      <div class="bg-stage">
+        <img id="resultImg" alt="Resultado">
+        <div class="bg-spinner" id="spinner" hidden>
+          <div class="loader-ring"></div>
+          <span id="spinnerText">Quitando el fondo...</span>
+        </div>
+      </div>
+      <div class="bg-actions">
+        <a id="downloadBtn" class="btn-gold" download="logo-sin-fondo.png">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span data-i18n="download">Descargar PNG</span>
+        </a>
+        <button id="resetBtn" class="btn-ghost" data-i18n="another">Otra imagen</button>
+      </div>
+    </div>
+
+    <p class="bg-note" id="note" data-i18n="note">
+      La primera vez carga un modelo de IA (unos segundos). Después es mucho más rápido. Funciona mejor con fondos claros o sólidos.
+    </p>
+
+  </div>
+
+</main>
+
+<script type="module">
+import { removeBackground } from "https://esm.sh/@imgly/background-removal@1.5.8";
+
+// ── i18n + tema ──────────────────────────────────────────────────────────────
+const T = {
+  es: {
+    allTools: '← Herramientas',
+    tag: 'Herramienta gratis',
+    title: 'Quita Fondo <span class="gold">PNG</span>',
+    sub: 'Sube un logo o imagen y quítale el fondo al instante. Todo pasa en tu dispositivo: tus imágenes nunca se suben a ningún servidor.',
+    dropTitle: 'Arrastra tu imagen aquí',
+    dropSub: 'o toca para elegir una foto · PNG, JPG o WebP',
+    download: 'Descargar PNG',
+    another: 'Otra imagen',
+    note: 'La primera vez carga un modelo de IA (unos segundos). Después es mucho más rápido. Funciona mejor con fondos claros o sólidos.',
+    working: 'Quitando el fondo...',
+    loadingModel: 'Cargando IA...',
+    err: 'Hubo un problema al procesar la imagen. Revisa tu conexión e inténtalo de nuevo.',
+    notImage: 'Ese archivo no es una imagen. Sube un PNG, JPG o WebP.'
+  },
+  en: {
+    allTools: '← Tools',
+    tag: 'Free tool',
+    title: 'PNG <span class="gold">Background Remover</span>',
+    sub: 'Upload a logo or image and remove its background instantly. Everything runs on your device — your images are never uploaded to any server.',
+    dropTitle: 'Drag your image here',
+    dropSub: 'or tap to choose a photo · PNG, JPG or WebP',
+    download: 'Download PNG',
+    another: 'Another image',
+    note: 'The first run loads an AI model (a few seconds). After that it is much faster. Works best with light or solid backgrounds.',
+    working: 'Removing background...',
+    loadingModel: 'Loading AI...',
+    err: 'There was a problem processing the image. Check your connection and try again.',
+    notImage: 'That file is not an image. Upload a PNG, JPG or WebP.'
+  }
+};
+
+let lang = localStorage.getItem('lang') === 'en' ? 'en' : 'es';
+function applyLang() {
+  const t = T[lang];
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (t[k] !== undefined) el.innerHTML = t[k];
+  });
+  document.querySelectorAll('[data-lang-btn]').forEach(b => b.textContent = lang === 'es' ? 'EN' : 'ES');
+}
+document.querySelectorAll('[data-lang-btn]').forEach(b => b.addEventListener('click', () => {
+  lang = lang === 'es' ? 'en' : 'es'; localStorage.setItem('lang', lang); applyLang();
+}));
+applyLang();
+
+let isDark = localStorage.getItem('theme') !== 'light';
+function applyTheme() {
+  document.body.classList.toggle('light', !isDark);
+  document.querySelectorAll('[data-theme-btn]').forEach(b => b.textContent = isDark ? '☀️ Claro' : '🌙 Oscuro');
+}
+document.querySelectorAll('[data-theme-btn]').forEach(b => b.addEventListener('click', () => {
+  isDark = !isDark; localStorage.setItem('theme', isDark ? 'dark' : 'light'); applyTheme();
+}));
+applyTheme();
+
+// ── Lógica del quita-fondos ───────────────────────────────────────────────────
+const dropZone    = document.getElementById('dropZone');
+const fileInput   = document.getElementById('fileInput');
+const resultBox   = document.getElementById('resultBox');
+const resultImg   = document.getElementById('resultImg');
+const spinner     = document.getElementById('spinner');
+const spinnerText = document.getElementById('spinnerText');
+const downloadBtn = document.getElementById('downloadBtn');
+const resetBtn    = document.getElementById('resetBtn');
+const note        = document.getElementById('note');
+
+let currentObjectUrls = [];
+function freeUrls() { currentObjectUrls.forEach(URL.revokeObjectURL); currentObjectUrls = []; }
+
+function reset() {
+  freeUrls();
+  resultBox.hidden = true;
+  dropZone.hidden  = false;
+  note.hidden      = false;
+  fileInput.value  = '';
+  resultImg.src    = '';
+}
+
+async function handleFile(file) {
+  if (!file || !file.type.startsWith('image/')) {
+    note.hidden = false;
+    note.textContent = T[lang].notImage;
+    return;
+  }
+
+  freeUrls();
+  dropZone.hidden = true;
+  note.hidden     = true;
+  resultBox.hidden = false;
+
+  // Vista previa del original mientras procesa
+  const previewUrl = URL.createObjectURL(file);
+  currentObjectUrls.push(previewUrl);
+  resultImg.src = previewUrl;
+  resultImg.style.opacity = '.35';
+
+  spinner.hidden = false;
+  spinnerText.textContent = T[lang].loadingModel;
+  downloadBtn.style.pointerEvents = 'none';
+  downloadBtn.style.opacity = '.5';
+
+  try {
+    const blob = await removeBackground(file, {
+      model: 'isnet_fp16',   // modelo ligero: descarga ~la mitad y procesa más rápido
+      progress: (key, current, total) => {
+        if (key.startsWith('fetch') && total) {
+          const pct = Math.round((current / total) * 100);
+          spinnerText.textContent = `${T[lang].loadingModel} ${pct}%`;
+        } else {
+          spinnerText.textContent = T[lang].working;
+        }
+      }
+    });
+
+    const outUrl = URL.createObjectURL(blob);
+    currentObjectUrls.push(outUrl);
+    resultImg.src = outUrl;
+    resultImg.style.opacity = '1';
+
+    const base = (file.name || 'logo').replace(/\.[^.]+$/, '');
+    downloadBtn.href = outUrl;
+    downloadBtn.download = `${base}-sin-fondo.png`;
+    downloadBtn.style.pointerEvents = '';
+    downloadBtn.style.opacity = '';
+  } catch (err) {
+    console.error(err);
+    note.hidden = false;
+    note.textContent = T[lang].err;
+    reset();
+  } finally {
+    spinner.hidden = true;
+  }
+}
+
+// Eventos de carga
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });
+fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+resetBtn.addEventListener('click', reset);
+
+['dragenter', 'dragover'].forEach(ev => dropZone.addEventListener(ev, e => {
+  e.preventDefault(); dropZone.classList.add('drag');
+}));
+['dragleave', 'drop'].forEach(ev => dropZone.addEventListener(ev, e => {
+  e.preventDefault(); dropZone.classList.remove('drag');
+}));
+dropZone.addEventListener('drop', e => {
+  const file = e.dataTransfer.files && e.dataTransfer.files[0];
+  if (file) handleFile(file);
+});
+</script>
+</body>
+</html>

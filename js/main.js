@@ -383,7 +383,7 @@ const YEAR = new Date().getFullYear();
 const T = {
   es: {
     navAbout: 'Nosotros', navServices: 'Servicios', navGallery: 'Galería',
-    navVideos: 'Videos',  navQuote: 'Cotizar',
+    navVideos: 'Videos',  navTools: 'Herramientas', navContact: 'Contacto', navQuote: 'Cotizar',
 
     heroBadge: '#1 en California',
     heroTitle: 'EXCELENCIA<br><span class="gold">EN CADA EVENTO</span>',
@@ -445,7 +445,7 @@ const T = {
   },
   en: {
     navAbout: 'About', navServices: 'Services', navGallery: 'Gallery',
-    navVideos: 'Videos', navQuote: 'Quote',
+    navVideos: 'Videos', navTools: 'Tools', navContact: 'Contact', navQuote: 'Quote',
 
     heroBadge: '#1 in California',
     heroTitle: 'EXCELLENCE<br><span class="gold">IN EVERY EVENT</span>',
@@ -522,7 +522,7 @@ function applyLang() {
   });
 
   const mobileLinks = document.querySelectorAll('.mob-link');
-  ['navAbout', 'navServices', 'navGallery', 'navVideos', 'navQuote'].forEach((key, i) => {
+  ['navAbout', 'navServices', 'navGallery', 'navVideos', 'navTools', 'navContact', 'navQuote'].forEach((key, i) => {
     if (mobileLinks[i] && t[key]) mobileLinks[i].textContent = t[key];
   });
 
