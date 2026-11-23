@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>SONAR Load-In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 650 370">
+    <g transform="translate(162 182)">
+      <g fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="miter">
+        <path d="M13 -174 L182 145 L-154 145 Z"/>
+        <path d="M138 -139 L306 180 L-29 180 Z"/>
+      </g>
+      <image x="0" y="0" width="480" height="109" href="assets/logo.png"/>
+    </g>
+  </symbol>
+</svg>
+
+<div id="app">
+  <section id="home" class="screen on">
+    <div class="top">
+      <svg class="biglogo" viewBox="0 0 650 370" role="img" aria-label="SONAR"><use href="#logo"/></svg>
+      <h1>LOAD-IN</h1>
+      <div class="tag">Carga el camión · Llega al show</div>
+      <div class="btns">
+        <button class="btn" id="bPlay">JUGAR</button>
+        <button class="btn alt" id="bLevels">NIVELES</button>
+        <button class="btn alt" id="bEndless">SIN FIN</button>
+      </div>
+      <div class="prog" id="prog"></div>
+      <button class="howlink" id="bHow">¿Cómo se juega?</button>
+    </div>
+    <div class="stagewrap party">
+      <div class="sky"><i class="beam b1"></i><i class="beam b2"></i><i class="beam b3"></i><i class="beam b4"></i></div>
+      <div class="road"></div>
+      <div class="truck" id="homeTruck"></div>
+    </div>
+  </section>
+
+  <section id="levels" class="screen">
+    <div class="bar">
+      <button class="ico" id="bHome" aria-label="Inicio"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <h2>NIVELES</h2>
+      <span class="tot" id="lvTot"></span>
+    </div>
+    <div id="lvgrid"></div>
+  </section>
+
+  <section id="game" class="screen">
+    <header id="hud">
+      <button class="ico" id="bBack" aria-label="Niveles"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="mid"><span class="lvl" id="hLvl">NIVEL 1</span><span class="ev" id="hEv"></span></div>
+      <span id="timer">0:00</span>
+      <button class="ico" id="bHint" aria-label="Pista"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg><i id="hintN">3</i></button>
+      <button class="ico" id="bReset" aria-label="Vaciar la caja"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.6-5.9"/><path d="M4 4v5h5"/></svg></button>
+      <button class="ico" id="bSnd" aria-label="Sonido"></button>
+    </header>
+    <div id="scene">
+      <div class="sky"><i class="beam b1"></i><i class="beam b2"></i><i class="beam b3"></i><i class="beam b4"></i></div>
+      <div class="road"></div>
+      <div class="truck" id="truck"></div>
+    </div>
+    <div id="play">
+      <div id="btab"><span id="bname">Caja del camión</span><b id="cnt">0/0</b></div>
+      <div id="board"></div>
+      <div id="traylbl">Equipo por cargar</div>
+      <div id="doorWrap"><div id="door"><svg viewBox="0 0 650 370"><use href="#logo"/></svg></div></div>
+      <div id="hint"></div>
+    </div>
+  </section>
+
+  <div id="modal">
+    <div class="card">
+      <h3 id="mTitle">¡CARGADO!</h3>
+      <div class="sub" id="mSub"></div>
+      <div id="stars"><span>★</span><span>★</span><span>★</span></div>
+      <div id="mtime"></div>
+      <div id="nameEntry" hidden>
+        <input id="nameInput" maxlength="12" placeholder="Tu nombre" autocomplete="off" autocorrect="off" spellcheck="false">
+        <button class="btn" id="bSaveScore">GUARDAR</button>
+      </div>
+      <ol id="ranking" hidden></ol>
+      <div class="btns">
+        <button class="btn" id="bNext">SIGUIENTE</button>
+        <div class="row">
+          <button class="btn alt" id="bAgain">REPETIR</button>
+          <button class="btn alt" id="bMenu">NIVELES</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="howto">
+    <div class="card">
+      <h3>CÓMO JUGAR</h3>
+      <ol class="steps">
+        <li>
+          <span class="si"><svg viewBox="0 0 24 24"><path d="M12 2v7M12 2l-3 3M12 2l3 3"/><path d="M2 12h7M2 12l3-3M2 12l3 3"/><path d="M22 12h-7M22 12l-3-3M22 12l-3 3"/><path d="M12 22v-7M12 22l-3-3M12 22l3-3"/></svg></span>
+          <p><b>Arrastra el equipo</b> a la caja del camión.</p>
+        </li>
+        <li>
+          <span class="si"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v4h-4"/></svg></span>
+          <p><b>Toca una pieza</b> para girarla si no cabe.</p>
+        </li>
+        <li>
+          <span class="si"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></span>
+          <p><b>Llena toda la caja sin huecos</b> antes de que se acabe el tiempo.</p>
+        </li>
+      </ol>
+      <button class="btn" id="bHowGo">¡A CARGAR!</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/01-config.js"></script>
+<script src="js/02-pieces.js"></script>
+<script src="js/03-levels.js"></script>
+<script src="js/04-truck.js"></script>
+<script src="js/05-sound.js"></script>
+<script src="js/06-store.js"></script>
+<script src="js/07-game.js"></script>
+<script src="js/08-ui.js"></script>
+<script src="js/09-main.js"></script>
+</body>
+</html>
